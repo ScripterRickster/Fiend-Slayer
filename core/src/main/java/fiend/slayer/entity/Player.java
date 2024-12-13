@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
+
 import fiend.slayer.FiendSlayer;
 
 public class Player extends Sprite {
@@ -26,6 +28,10 @@ public class Player extends Sprite {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             x -= delta;
         }
+    }
+
+    public Rectangle getRectangle(){
+        return new Rectangle(this.x,this.y,this.getWidth(),this.getHeight());
     }
 
     public void render() {
