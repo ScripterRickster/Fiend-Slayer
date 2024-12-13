@@ -59,8 +59,8 @@ public class GameScreen implements Screen {
             plr_rect.setX(x);
             plr_rect.setY(y);
 
-            System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
-            System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
+            //System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
+            //System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
 
             if (Intersector.overlaps(c_rect, plr_rect)) {
                 return true;
