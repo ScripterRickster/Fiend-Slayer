@@ -35,6 +35,8 @@ public class Player {
         float prevX = x;
         float prevY = y;
 
+
+
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += delta * 4f;
         }

@@ -6,7 +6,12 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.screens.GameScreen;
@@ -66,6 +71,28 @@ public class Mob {
             x = prevX;
             y = prevY;
         }
+
+        Vector2 playerPosition = new Vector2(gs.player.x, gs.player.y);
+        sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
+        //System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
+    }
+
+    private boolean checkLineOfSight(Vector2 start, Vector2 end) {
+        MapLayer collisionLayer = gs.collisionLayer;
+
+        if (collisionLayer == null) {
+            return false;
+        }
+
+        for (RectangleMapObject object : collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            Rectangle scaled_rect = new Rectangle(rect.getX() * 1/gs.tile_size,rect.getY() * 1/gs.tile_size,rect.getWidth() * 1/gs.tile_size,rect.getHeight() * 1/gs.tile_size);
+            if (Intersector.intersectSegmentRectangle(start, end, scaled_rect)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void render(SpriteBatch batch) {

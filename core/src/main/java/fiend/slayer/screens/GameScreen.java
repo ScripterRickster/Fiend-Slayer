@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -29,8 +30,10 @@ public class GameScreen implements Screen {
     TiledMap tiledmap;
     OrthogonalTiledMapRenderer tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1/16f);
     ExtendViewport viewport;
-    Player player;
-    float tile_size;
+    public Player player;
+    public float tile_size;
+
+    public MapLayer collisionLayer;
 
     Array<Mob> active_mobs = new Array<>();
 
@@ -52,6 +55,8 @@ public class GameScreen implements Screen {
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1/tile_size);
         viewport = new ExtendViewport(16, 16);
 
+        collisionLayer = tiledmap.getLayers().get("collisions");
+
         if(tiledmap != null){
             MapObjects mob_spawn_locs = tiledmap.getLayers().get("mob_spawning_locations").getObjects();
             for(RectangleMapObject rectangleObject: mob_spawn_locs.getByType(RectangleMapObject.class)){
@@ -68,45 +73,46 @@ public class GameScreen implements Screen {
 
 
     public boolean checkForCollisions(float x,float y,Object o) {
-        MapObjects objects = tiledmap.getLayers().get("collisions").getObjects();
-        if(o != null){
-            if(o.getClass() == Player.class){
-                for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-                    Rectangle o_rect = rectangleObject.getRectangle();
-                    Rectangle c_rect = new Rectangle(o_rect.getX() * 1/tile_size, o_rect.getY() * 1/tile_size, o_rect.getWidth() * 1/tile_size, o_rect.getHeight() * 1/tile_size);
+        if(collisionLayer != null){
+            MapObjects objects = collisionLayer.getObjects();
+            if(o != null){
+                if(o.getClass() == Player.class){
+                    for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+                        Rectangle o_rect = rectangleObject.getRectangle();
+                        Rectangle c_rect = new Rectangle(o_rect.getX() * 1/tile_size, o_rect.getY() * 1/tile_size, o_rect.getWidth() * 1/tile_size, o_rect.getHeight() * 1/tile_size);
 
 
-                    Rectangle plr_rect =((Player) player).getRectangle();
-                    plr_rect.setX(x);
-                    plr_rect.setY(y);
+                        Rectangle plr_rect =((Player) player).getRectangle();
+                        plr_rect.setX(x);
+                        plr_rect.setY(y);
 
-                    //System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
-                    //System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
+                        //System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
+                        //System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
 
-                    if (Intersector.overlaps(c_rect, plr_rect)) {
-                        return true;
+                        if (Intersector.overlaps(c_rect, plr_rect)) {
+                            return true;
+                        }
                     }
-                }
-            }else if(o.getClass() == Mob.class){
-                for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-                    Rectangle o_rect = rectangleObject.getRectangle();
-                    Rectangle c_rect = new Rectangle(o_rect.getX() * 1/tile_size, o_rect.getY() * 1/tile_size, o_rect.getWidth() * 1/tile_size, o_rect.getHeight() * 1/tile_size);
+                }else if(o.getClass() == Mob.class){
+                    for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+                        Rectangle o_rect = rectangleObject.getRectangle();
+                        Rectangle c_rect = new Rectangle(o_rect.getX() * 1/tile_size, o_rect.getY() * 1/tile_size, o_rect.getWidth() * 1/tile_size, o_rect.getHeight() * 1/tile_size);
 
 
-                    Rectangle mob_rect = ((Mob) o).getRectangle();
-                    mob_rect.setX(x);
-                    mob_rect.setY(y);
+                        Rectangle mob_rect = ((Mob) o).getRectangle();
+                        mob_rect.setX(x);
+                        mob_rect.setY(y);
 
-                    //System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
-                    //System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
+                        //System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
+                        //System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
 
-                    if (Intersector.overlaps(c_rect, mob_rect)) {
-                        return true;
+                        if (Intersector.overlaps(c_rect, mob_rect)) {
+                            return true;
+                        }
                     }
                 }
             }
         }
-
         return false;
     }
 
