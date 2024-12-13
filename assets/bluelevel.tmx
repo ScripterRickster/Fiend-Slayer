@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" source="../../tileset1.tsx"/>
- <layer id="1" name="Tile Layer 1" width="30" height="20">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="10">
+ <tileset firstgid="1" source="tileset1.tsx"/>
+ <layer id="1" name="main" width="30" height="20">
   <data encoding="base64" compression="zlib">
-   eJzFVVsKwDAIa+9/6X0NxlCbh9hA2UdjrBrcWjW2cViw8Z25O9HxDqe2iIvEVhx1HqoWCqbPf96EX5g5KB7OYqJaGb0uRFpZDsSfTF7HjxP7ROnBy1HfpPR+f77ODCrt093kbkf84PT/pH0DWX2T/382X8TvRLVb0fMA55YAqQ==
+   eJzFVVsOwCAM0vtfel9LlqUPCriRGD/WgqXVrVVjGxbLy0LNV+GsgfElikVyu35NdFUuFBOf33GOPiGaaB+Y+c9yolonfC5EXJkGMp8TXWUeXW9RBcaDO4Y9E+P9fuxKDyru7tsXdzXSjfRV/zvuP5DV5/7vM+eo+E96V72t6LoA+uYAqw==
   </data>
  </layer>
+ <objectgroup id="3" name="collisions">
+  <object id="7" name="Rect 1" x="129.253" y="-0.979192" width="267.319" height="15.6671"/>
+  <object id="8" name="Rect 2" x="-3.91677" y="16.6463" width="145.9" height="15.6671"/>
+  <object id="9" name="Rect 3" x="15.6671" y="254.59" width="61.6891" height="15.6671"/>
+ </objectgroup>
 </map>

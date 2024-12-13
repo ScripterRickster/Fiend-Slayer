@@ -27,7 +27,7 @@ public class Player {
     }
 
     public Rectangle getRectangle(){
-        return new Rectangle(x,y,sprite.getWidth(),sprite.getHeight());
+        return new Rectangle(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
     }
 
     public void update(float delta) {
@@ -48,7 +48,7 @@ public class Player {
             y -= delta * 4f;
         }
 
-        if(!gs.checkForCollisions()){
+        if(!gs.checkForCollisions(x,y)){
             sprite.setPosition(x, y);
         }else{
             System.out.println("Collided with objects");
