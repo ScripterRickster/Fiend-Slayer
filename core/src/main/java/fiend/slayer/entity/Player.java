@@ -4,38 +4,42 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
-
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fiend.slayer.FiendSlayer;
 
-public class Player extends Sprite {
+public class Player {
     final FiendSlayer game;
 
-    float x, y;
+    final private Sprite sprite;
+    public float x, y;
 
     public Player(final FiendSlayer g) {
-        super(new Texture("player.png"));
+        sprite = new Sprite(new Texture("player.png"));
+        sprite.setSize(1, 1);
 
         game = g;
         x = 0; y = 0;
-        setSize(1, 1);
     }
 
     public void update(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            x += delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            x += delta * 4f;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            x -= delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            x -= delta * 4f;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            y += delta * 4f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            y -= delta * 4f;
+        }
+
+        sprite.setPosition(x, y);
     }
 
-    public Rectangle getRectangle(){
-        return new Rectangle(this.x,this.y,this.getWidth(),this.getHeight());
-    }
-
-    public void render() {
-        draw(game.batch);
+    public void render(SpriteBatch batch) {
+        sprite.draw(batch);
     }
 
 }
