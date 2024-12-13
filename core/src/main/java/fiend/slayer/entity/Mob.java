@@ -6,6 +6,7 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.screens.GameScreen;
@@ -34,6 +35,10 @@ public class Mob {
 
     }
 
+    public Rectangle getRectangle(){
+        return new Rectangle(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
+    }
+
     public void update(float delta){
         float prevX = x;
         float prevY = y;
@@ -54,7 +59,7 @@ public class Mob {
             y -= delta * speed;
         }
 
-        if(!gs.checkForCollisions(x,y)){
+        if(!gs.checkForCollisions(x,y,this)){
             sprite.setPosition(x, y);
         }else{
             //System.out.println("Collided with objects");

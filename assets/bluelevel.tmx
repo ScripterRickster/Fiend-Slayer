@@ -18,7 +18,7 @@
   <object id="18" name="Collide Rect" x="271.167" y="112.59" width="63.6891" height="15.6671"/>
   <object id="19" name="Collide Rect" x="320.667" y="127.59" width="32.1891" height="15.6671"/>
   <object id="20" name="Collide Rect" x="336.167" y="143.59" width="14.6891" height="63.1671"/>
-  <object id="21" name="Collide Rect" x="318.667" y="190.09" width="21.1891" height="19.1671"/>
+  <object id="21" name="Collide Rect" x="318.667" y="190.09" width="17.1891" height="17.8338"/>
   <object id="16" name="Collide Rect" x="207.667" y="303.59" width="65.6891" height="15.6671"/>
   <object id="13" name="Collide Rect" x="159.167" y="272.09" width="241.189" height="15.6671"/>
   <object id="11" name="Collide Rect" x="48.1671" y="208.09" width="15.1891" height="46.1671"/>

@@ -48,7 +48,7 @@ public class Player {
             y -= delta * 4f;
         }
 
-        if(!gs.checkForCollisions(x,y)){
+        if(!gs.checkForCollisions(x,y,this)){
             sprite.setPosition(x, y);
         }else{
             //System.out.println("Collided with objects");
