@@ -51,7 +51,7 @@ public class Player {
         if(!gs.checkForCollisions(x,y)){
             sprite.setPosition(x, y);
         }else{
-            System.out.println("Collided with objects");
+            //System.out.println("Collided with objects");
             x = prevX;
             y = prevY;
         }

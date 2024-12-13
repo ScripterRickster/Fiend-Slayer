@@ -1,5 +1,6 @@
 package fiend.slayer.screens;
 
+import java.util.Random;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,9 +14,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
+import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 
 public class GameScreen implements Screen {
@@ -28,6 +31,11 @@ public class GameScreen implements Screen {
     ExtendViewport viewport;
     Player player;
     float tile_size;
+
+    Array<Mob> active_mobs = new Array<>();
+
+
+    Random r = new Random();
 
     public GameScreen(final FiendSlayer g) {
         game = g;
@@ -43,6 +51,20 @@ public class GameScreen implements Screen {
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1/tile_size);
         viewport = new ExtendViewport(16, 16);
+
+        if(tiledmap != null){
+            MapObjects mob_spawn_locs = tiledmap.getLayers().get("mob_spawning_locations").getObjects();
+            for(RectangleMapObject rectangleObject: mob_spawn_locs.getByType(RectangleMapObject.class)){
+                Rectangle s_loc = rectangleObject.getRectangle();
+                float mx = s_loc.getX() * 1/tile_size;
+                float my = s_loc.getY() * 1/tile_size;
+
+
+                Mob newMob = new Mob(game,this,mx,my);
+                active_mobs.add(newMob);
+            }
+        }
+
 
 
 
@@ -69,27 +91,9 @@ public class GameScreen implements Screen {
         return false;
     }
 
-
-    /*public boolean checkForCollisions(){
-        int objectLayerId = 0;
-        TiledMapTileLayer collisionObjectLayer = (TiledMapTileLayer)tiledmap.getLayers().get(objectLayerId);
-        MapObjects objects = collisionObjectLayer.getObjects();
-
-        for (RectangleMapObject rectangleObject : objects)){ //objects.getByType(RectangleMapObject.class)) {
-
-            Rectangle rectangle = rectangleObject.getRectangle();
-            Rectangle plr_rect = player.getRectangle();
-            System.out.println("RECT X: " + rectangle.getX() + " | RECT Y: " + rectangle.getY());
-            System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
-            if (Intersector.overlaps(rectangle, plr_rect)) {
-                return true;
-            }
-        }
-        return false;
-    }*/
-
     @Override
     public void render(float delta) {
+
         ScreenUtils.clear(Color.BLACK);
         player.update(delta);
         viewport.apply();
@@ -102,6 +106,14 @@ public class GameScreen implements Screen {
         //
 
         player.render(batch);
+
+        for(Mob m: active_mobs){
+            m.render(batch);
+
+            if(r.nextInt(100) <= 5){
+                m.update(delta);
+            }
+        }
 
         //
         batch.end();
