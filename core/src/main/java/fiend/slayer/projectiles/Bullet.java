@@ -2,9 +2,11 @@ package fiend.slayer.projectiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Entity;
+import fiend.slayer.entity.Mob;
 import fiend.slayer.screens.GameScreen;
 
 public class Bullet extends Entity {
@@ -17,7 +19,7 @@ public class Bullet extends Entity {
     public Entity source_entity;
 
     public Bullet(final FiendSlayer g, final GameScreen gs, Entity se, float heading) {
-        super(g, gs);
+        super(g, gs,"bullet");
 
         source_entity = se;
 
@@ -30,7 +32,7 @@ public class Bullet extends Entity {
         sprite.setOrigin(sprite.getX() + sprite.getWidth()/2, sprite.getY() + sprite.getHeight()/2);
         sprite.setRotation((float) Math.toDegrees(heading));
 
-        System.out.printf("Bullet X %f Y %f Source X %f Y %f\n", x, y, source_entity.x, source_entity.y);
+        //System.out.printf("Bullet X %f Y %f Source X %f Y %f\n", x, y, source_entity.x, source_entity.y);
     }
 
     @Override
@@ -43,22 +45,54 @@ public class Bullet extends Entity {
             dead = true;
         }
 
-<<<<<<< HEAD
+
         if((x < 0 || x > 800 * 1/gs.tile_size) || (y < 0 || y > 600 * 1/gs.tile_size)){
-            System.out.println("DELETING...." + this.toString());
+            //System.out.println("DELETING...." + this.toString());
 
             gs.removeObject(this);
         }
+
+        if(dead == false){
+            if(source_entity.type == "mob" && this.collideWithOtherEntity(gs.player)){
+                if(gs.player.armor == 0){
+                    if(gs.player.hp <= 0){
+                        gs.player.dead = true;
+
+                    }else{
+                        gs.player.hp--;
+                    }
+                }else{
+                    gs.player.armor--;
+                }
+                System.out.println(gs.player);
+                dead = true;
+
+            }else if(source_entity.type == "player"){
+                for(int i=gs.mobs.size-1;i>=0;--i){
+                    if(this.collideWithOtherEntity(gs.mobs.get(i))){
+                        Mob curr_mob = gs.mobs.get(i);
+                        if(curr_mob.hp > 0){
+                            curr_mob.hp--;
+                        }else{
+                            curr_mob.dead = true;
+                        }
+                        dead = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(this.collideWithOtherEntity(gs.player) && dead==false){
+
+
+        }
+
+
     }
 
     public void render(SpriteBatch batch) {
         sprite.draw(batch);
-    }
-
-    @Override
-    public String toString(){
-        return "BULLET CORDS | X: " + x + " | Y: " + y + " | BULLET HEADING: " + heading;
-=======
         if ((x < 0 || x > 800 * (1/gs.tile_size)) || (y < 0 || y > 600 * (1/gs.tile_size))){
             dead = true;
         }

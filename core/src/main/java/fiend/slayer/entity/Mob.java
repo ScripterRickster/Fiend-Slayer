@@ -18,12 +18,15 @@ public class Mob extends Entity {
 
     public boolean sees_player = false;
     public float speed = 1;
+    public int hp = 10;
+
+    public boolean dead = false;
 
     Random rand = new Random();
 
 
     public Mob(final FiendSlayer g,final GameScreen gs,float tx,float ty){
-        super(g, gs);
+        super(g, gs,"mob");
 
         sprite = new Sprite(new Texture("mob1.png"));
         sprite.setSize(1, 1);
@@ -85,13 +88,13 @@ public class Mob extends Entity {
         return true;
     }
 
-    public float getHeadingToPlayer(){
+    /*public float getHeadingToPlayer(){
         return (float) (Math.atan2(gs.player.y - y, gs.player.x - x));
-    }
+    }*/
 
     private void fire_projectile(){
         if (sees_player) {
-            Bullet b = new Bullet(game, gs, this, getHeadingToPlayer());
+            Bullet b = new Bullet(game, gs, this, getHeadingToOtherEntity(gs.player));
             gs.bullets.add(b);
         }
     }

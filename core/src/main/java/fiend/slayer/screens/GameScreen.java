@@ -117,8 +117,12 @@ public class GameScreen implements Screen {
 
         // UPDATE HERE
         player.update(delta);
-        for (Mob m : mobs) {
+        for(int i=mobs.size-1;i>=0;--i){
+            Mob m = mobs.get(i);
             if (rand.nextInt(100) <= 5) m.update(delta);
+            if(m.dead){
+                mobs.removeIndex(0);
+            }
         }
 
         for (int i = bullets.size - 1; i >= 0; --i) {

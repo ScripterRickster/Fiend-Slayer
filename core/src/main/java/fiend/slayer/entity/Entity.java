@@ -15,10 +15,12 @@ public abstract class Entity {
 
     public boolean dead = false;
     public float x, y;
+    public String type;
 
-    public Entity(final FiendSlayer g, final GameScreen gs) {
+    public Entity(final FiendSlayer g, final GameScreen gs,String type) {
         game = g;
         this.gs = gs;
+        this.type = type;
 
         // subclasses are responsible for initializing x, y, and sprite
     }
@@ -28,6 +30,14 @@ public abstract class Entity {
     }
 
     public void update(float delta) {
+    }
+
+    public boolean collideWithOtherEntity(Entity e){
+        return this.getRectangle().overlaps(e.getRectangle());
+    }
+
+    public float getHeadingToOtherEntity(Entity e){
+        return (float) (Math.atan2(e.y-y, e.x-x));
     }
 
     public void render(SpriteBatch batch) {
