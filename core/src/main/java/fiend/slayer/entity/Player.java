@@ -19,7 +19,7 @@ public class Player extends Entity {
 
     public int maxHP = 100;
     public int maxArmor = 10;
-    public int maxEnergy = 200;
+    public int maxEnergy = 10;
 
     public int hp = maxHP;
     public int armor = maxArmor;
@@ -90,24 +90,23 @@ public class Player extends Entity {
             }
 
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-
-                float closestHeading = headingLeft == true ? (float) Math.toRadians(180.0) : 0f;
-                float closestDist = Float.MAX_VALUE;
-                for(int i=gs.mobs.size - 1; i>=0;--i){
-                    Mob m = gs.mobs.get(i);
-
-                    Vector2 mob_vec = new Vector2(m.x,m.y);
-                    Vector2 plr_vec = new Vector2(x,y);
-                    if(mob_vec.dst(plr_vec) < closestDist){
-                        closestDist = mob_vec.dst(plr_vec);
-                        closestHeading = this.getHeadingToOtherEntity(m);
-                    }
-
-
-                }
-                Bullet b = new Bullet(game,gs,this,closestHeading);
-                gs.bullets.add(b);
                 if(energy > 0){
+                    float closestHeading = headingLeft == true ? (float) Math.toRadians(180.0) : 0f;
+                    float closestDist = Float.MAX_VALUE;
+                    for(int i=gs.mobs.size - 1; i>=0;--i){
+                        Mob m = gs.mobs.get(i);
+
+                        Vector2 mob_vec = new Vector2(m.x,m.y);
+                        Vector2 plr_vec = new Vector2(x,y);
+                        if(mob_vec.dst(plr_vec) < closestDist){
+                            closestDist = mob_vec.dst(plr_vec);
+                            closestHeading = this.getHeadingToOtherEntity(m);
+                        }
+
+
+                    }
+                    Bullet b = new Bullet(game,gs,this,closestHeading);
+                    gs.bullets.add(b);
                     energy--;
                     System.out.println(this);
                 }
