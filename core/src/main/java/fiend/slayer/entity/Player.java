@@ -10,21 +10,12 @@ import fiend.slayer.FiendSlayer;
 import fiend.slayer.screens.GameScreen;
 
 public class Player extends Entity {
-    
-    final FiendSlayer game;
-    final GameScreen gs;
-
-    final private Sprite sprite;
-    public float x, y;
 
     public Player(final FiendSlayer g,final GameScreen gs) {
         super(g, gs);
 
         sprite = new Sprite(new Texture("player.png"));
         sprite.setSize(1, 1);
-
-        game = g;
-        this.gs = gs;
         x = 0; y = 0;
     }
 
@@ -34,7 +25,6 @@ public class Player extends Entity {
         float prevX = x;
         float prevY = y;
 
-
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += delta * 4f;
         }
@@ -42,7 +32,7 @@ public class Player extends Entity {
             x -= delta * 4f;
         }
 
-        if (!gs.checkForCollisions(x,y,this)){
+        if (!gs.checkForCollisions(this)){
             sprite.setPosition(x, y);
         } else {
             x = prevX;
@@ -59,7 +49,7 @@ public class Player extends Entity {
             y -= delta * 4f;
         }
 
-        if (!gs.checkForCollisions(x,y,this)){
+        if (!gs.checkForCollisions(this)){
             sprite.setPosition(x, y);
         } else {
             x = prevX;
@@ -67,11 +57,6 @@ public class Player extends Entity {
         }
 
 
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        sprite.draw(batch);
     }
 
 }
