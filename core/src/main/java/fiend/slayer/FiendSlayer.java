@@ -15,6 +15,7 @@ public class FiendSlayer extends Game {
     public FitViewport viewport;
     public AssetManager assetman;
 
+    @Override
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -27,10 +28,12 @@ public class FiendSlayer extends Game {
         this.setScreen(new GameScreen(this));
     }
 
+    @Override
     public void render() {
         super.render();
     }
 
+    @Override
     public void dispose() {
         batch.dispose();
         font.dispose();
