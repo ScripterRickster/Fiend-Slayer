@@ -44,6 +44,7 @@ public class Mob {
         this.gs = gs;
         x = tx; y = ty;
 
+
     }
 
     public Rectangle getRectangle(){
@@ -112,14 +113,14 @@ public class Mob {
 
         double deg = Math.toDegrees(Math.atan2(dy,dx));
 
-        deg += deg < 0 ? 360 : 0;
+        //deg += deg < 0 ? 360 : 0;
 
         return deg;
     }
 
     private void fire_projectile(){
         if(sees_player && bullet_spawned == false){
-            Bullet b = new Bullet(game,gs,x,y,getHeadingToPlayer(),"mob");
+            Bullet b = new Bullet(game,gs,sprite.getX(),sprite.getY(),getHeadingToPlayer(),"mob");
             System.out.println(this.toString() + "\n" + b.toString());
             gs.addObject(b);
             //bullet_spawned = true;

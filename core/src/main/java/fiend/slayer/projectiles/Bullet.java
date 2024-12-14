@@ -27,14 +27,18 @@ public class Bullet {
         sprite = new Sprite(new Texture("bullet.png"));
         sprite.setSize(1, 1);
 
+        //sprite.setPosition(tx,ty);
+
         game = g;
         this.gs = gs;
         x = tx; y = ty;
 
         this.heading = heading;
 
-        sprite.setRotation((float)heading);
+        sprite.rotate((float)heading);
         this.type = type;
+
+
     }
 
     public Rectangle getRectangle(){

@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
 
                 Mob newMob = new Mob(game,this,mx,my);
                 active_mobs.add(newMob);
-                break;
+                //break;
             }
         }
     }
