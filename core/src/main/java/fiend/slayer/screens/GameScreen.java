@@ -1,7 +1,5 @@
 package fiend.slayer.screens;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,12 +14,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 import fiend.slayer.projectiles.Bullet;
+
+import java.util.Random;
 
 public class GameScreen implements Screen {
 
@@ -35,7 +34,6 @@ public class GameScreen implements Screen {
     public float tile_size;
 
     public Player player;
-
     public Array<Bullet> bullets = new Array<>();
     public Array<Mob> mobs = new Array<>();
     public Random rand = new Random();
@@ -62,9 +60,7 @@ public class GameScreen implements Screen {
                 float mx = s_loc.getX() * 1 / tile_size;
                 float my = s_loc.getY() * 1 / tile_size;
 
-
                 System.out.println("MOB INIT CORDS | X: " + mx + " | Y: "+my);
-
 
                 Mob newMob = new Mob(game,this,mx,my);
                 mobs.add(newMob);
@@ -73,55 +69,18 @@ public class GameScreen implements Screen {
         }
     }
 
-    public boolean checkForCollisions(Entity o) {
-        if (tiledmap.getLayers().get("collisions") != null) {
-            MapObjects objects = tiledmap.getLayers().get("collisions").getObjects();
-            for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
-                Rectangle map_crect = new Rectangle(rectmapobj.getRectangle().getX() * 1 / tile_size, rectmapobj.getRectangle().getY() * 1 / tile_size,
-                rectmapobj.getRectangle().getWidth() * 1 / tile_size, rectmapobj.getRectangle().getHeight() * 1 / tile_size);
 
-                Rectangle entity_rect = o.getRectangle();
-                entity_rect.setX(o.x);
-                entity_rect.setY(o.y);
-
-                if (Intersector.overlaps(map_crect, entity_rect)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public void addObject(Object o){
-        if(o != null){
-            if(o.getClass() == Bullet.class){
-                bullets.add((Bullet)o);
-            }
-        }
-    }
-
-    public void removeObject(Object o){
-        if(o != null){
-            if(o.getClass() == Bullet.class){
-                for(int i=0;i<bullets.size;i++){
-                    if(bullets.get(i) == (Bullet)o){
-                        bullets.removeIndex(i);
-                    }
-                }
-            }
-        }
-    }
 
     @Override
     public void render(float delta) {
 
         // UPDATE HERE
         player.update(delta);
-        for(int i=mobs.size-1;i>=0;--i){
+        for(int i = mobs.size-1; i>=0; --i){
             Mob m = mobs.get(i);
             if (rand.nextInt(100) <= 5) m.update(delta);
             if(m.dead){
-                mobs.removeIndex(0);
+                mobs.removeIndex(i);
             }
         }
 
@@ -180,4 +139,23 @@ public class GameScreen implements Screen {
     public void dispose() { // this is not called automatically
     }
 
+    public boolean checkForCollisions(Entity o) {
+        if (tiledmap.getLayers().get("collisions") != null) {
+            MapObjects objects = tiledmap.getLayers().get("collisions").getObjects();
+            for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
+                Rectangle map_crect = new Rectangle(rectmapobj.getRectangle().getX() * 1 / tile_size, rectmapobj.getRectangle().getY() * 1 / tile_size,
+                        rectmapobj.getRectangle().getWidth() * 1 / tile_size, rectmapobj.getRectangle().getHeight() * 1 / tile_size);
+
+                Rectangle entity_rect = o.getRectangle();
+                entity_rect.setX(o.x);
+                entity_rect.setY(o.y);
+
+                if (Intersector.overlaps(map_crect, entity_rect)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

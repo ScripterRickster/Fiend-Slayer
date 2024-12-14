@@ -50,16 +50,12 @@ public class Player extends Entity {
         };
         Timer.schedule(regenArmor,0f,15f);
 
-
-
     }
-
-
 
     @Override
     public void update(float delta) {
 
-        if(dead == false){
+        if (!dead){
             float prevX = x;
             float prevY = y;
 

@@ -3,10 +3,10 @@ package fiend.slayer.projectiles;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
+import fiend.slayer.entity.Player;
 import fiend.slayer.screens.GameScreen;
 
 public class Bullet extends Entity {
@@ -46,14 +46,14 @@ public class Bullet extends Entity {
         }
 
 
-        if((x < 0 || x > 800 * 1/gs.tile_size) || (y < 0 || y > 600 * 1/gs.tile_size)){
+        if ((x < 0 || x > 800 * 1/gs.tile_size) || (y < 0 || y > 600 * 1/gs.tile_size)){
             //System.out.println("DELETING...." + this.toString());
 
-            gs.removeObject(this);
+            this.dead = true;
         }
 
-        if(dead == false){
-            if(source_entity.type == "mob" && this.collideWithOtherEntity(gs.player)){
+        if (!dead){
+            if(source_entity instanceof Mob && this.collideWithOtherEntity(gs.player)){
                 if(gs.player.armor == 0){
                     if(gs.player.hp <= 0){
                         gs.player.dead = true;
@@ -67,7 +67,7 @@ public class Bullet extends Entity {
                 System.out.println(gs.player);
                 dead = true;
 
-            }else if(source_entity.type == "player"){
+            }else if(source_entity instanceof Player){
                 for(int i=gs.mobs.size-1;i>=0;--i){
                     if(this.collideWithOtherEntity(gs.mobs.get(i))){
                         Mob curr_mob = gs.mobs.get(i);
@@ -83,7 +83,7 @@ public class Bullet extends Entity {
             }
         }
 
-        if(this.collideWithOtherEntity(gs.player) && dead==false){
+        if (this.collideWithOtherEntity(gs.player) && !dead){
 
 
         }

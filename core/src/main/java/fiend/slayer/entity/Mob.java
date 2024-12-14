@@ -20,8 +20,6 @@ public class Mob extends Entity {
     public float speed = 1;
     public int hp = 10;
 
-    public boolean dead = false;
-
     Random rand = new Random();
 
 
