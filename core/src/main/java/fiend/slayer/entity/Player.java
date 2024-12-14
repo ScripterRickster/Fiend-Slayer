@@ -11,6 +11,8 @@ import fiend.slayer.screens.GameScreen;
 
 public class Player extends Entity {
 
+    float speed = 8f;
+
     public Player(final FiendSlayer g,final GameScreen gs) {
         super(g, gs);
 
@@ -26,15 +28,13 @@ public class Player extends Entity {
         float prevY = y;
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            x += delta * 4f;
+            x += speed * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            x -= delta * 4f;
+            x -= speed * delta;
         }
 
-        if (!gs.checkForCollisions(this)){
-            sprite.setPosition(x, y);
-        } else {
+        if (gs.checkForCollisions(this)) {
             x = prevX;
             y = prevY;
         }
@@ -43,18 +43,18 @@ public class Player extends Entity {
         prevY = y;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            y += delta * 4f;
+            y += speed * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y -= delta * 4f;
+            y -= speed  * delta;
         }
 
-        if (!gs.checkForCollisions(this)){
-            sprite.setPosition(x, y);
-        } else {
+        if (gs.checkForCollisions(this)) {
             x = prevX;
             y = prevY;
         }
+
+        sprite.setPosition(x, y);
 
 
     }

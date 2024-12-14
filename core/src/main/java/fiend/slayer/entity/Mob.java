@@ -19,8 +19,6 @@ public class Mob extends Entity {
     public boolean sees_player = false;
     public float speed = 1;
 
-    private boolean bullet_spawned = false;
-
     Random rand = new Random();
 
 
@@ -38,26 +36,24 @@ public class Mob extends Entity {
         float prevX = x;
         float prevY = y;
 
-        int xDir = rand.nextInt(2) - 1;
-        int yDir = rand.nextInt(2) - 1;
+        int xDir = rand.nextInt(3) - 2;
+        int yDir = rand.nextInt(3) - 2;
 
-        if(xDir == 1){
-            x += delta * speed;
-        }else if(xDir == -1){
-            x -= delta * speed;
+        if (xDir == 1) {
+            x += speed * delta;
+        } else if (xDir == -1) {
+            x -= speed * delta;
         }
 
 
-        if(yDir == 1){
-            y += delta * speed;
-        }else if(yDir == -1){
-            y -= delta * speed;
+        if (yDir == 1){
+            y += speed * delta;
+        } else if (yDir == -1){
+            y += speed * delta;
         }
 
-        if(!gs.checkForCollisions(this)){
-            sprite.setPosition(x, y);
-        }else{
-            //System.out.println("Collided with objects");
+
+        if (gs.checkForCollisions(this)){
             x = prevX;
             y = prevY;
         }
@@ -65,12 +61,10 @@ public class Mob extends Entity {
         Vector2 playerPosition = new Vector2(gs.player.x, gs.player.y);
         sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
 
-        if(rand.nextInt(100) <= 100){
-            //if(gs.bullets.size == 0){bullet_spawned =false;}
-            fire_projectile();
-        }
+        fire_projectile();
 
         //System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
+        sprite.setPosition(x, y);
     }
 
     private boolean checkLineOfSight(Vector2 start, Vector2 end) {
@@ -91,22 +85,14 @@ public class Mob extends Entity {
         return true;
     }
 
-    public double getHeadingToPlayer(){
-        float dx = gs.player.x - x;
-        float dy = gs.player.y - y;
-
-        //deg += deg < 0 ? 360 : 0;
-
-        return Math.toDegrees(Math.atan2(dy,dx));
+    public float getHeadingToPlayer(){
+        return (float) (Math.atan2(gs.player.y - y, gs.player.x - x));
     }
 
     private void fire_projectile(){
-        if (gs.bullets.size > 0) return;
-        if(sees_player && !bullet_spawned){
-            Bullet b = new Bullet(game,gs, this, getHeadingToPlayer(),"mob");
-            // System.out.println(this.toString() + "\n" + b.toString());
+        if (sees_player) {
+            Bullet b = new Bullet(game, gs, this, getHeadingToPlayer());
             gs.bullets.add(b);
-            //bullet_spawned = true;
         }
     }
 
