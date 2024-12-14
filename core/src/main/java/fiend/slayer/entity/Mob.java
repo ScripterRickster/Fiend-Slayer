@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
@@ -22,7 +21,7 @@ public class Mob extends Entity {
 
     private boolean bullet_spawned = false;
 
-    Random r = new Random();
+    Random rand = new Random();
 
 
     public Mob(final FiendSlayer g,final GameScreen gs,float tx,float ty){
@@ -39,8 +38,8 @@ public class Mob extends Entity {
         float prevX = x;
         float prevY = y;
 
-        int xDir = r.nextInt(2) - 1;
-        int yDir = r.nextInt(2) - 1;
+        int xDir = rand.nextInt(2) - 1;
+        int yDir = rand.nextInt(2) - 1;
 
         if(xDir == 1){
             x += delta * speed;
@@ -66,7 +65,7 @@ public class Mob extends Entity {
         Vector2 playerPosition = new Vector2(gs.player.x, gs.player.y);
         sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
 
-        if(r.nextInt(100) <= 100){
+        if(rand.nextInt(100) <= 100){
             //if(gs.bullets.size == 0){bullet_spawned =false;}
             fire_projectile();
         }

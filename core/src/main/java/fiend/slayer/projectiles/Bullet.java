@@ -10,8 +10,6 @@ import fiend.slayer.screens.GameScreen;
 
 public class Bullet extends Entity {
 
-    Entity source_entity;
-
     double heading;
 
     public String type;
@@ -29,8 +27,6 @@ public class Bullet extends Entity {
 
         sprite.rotate((float)heading);
         this.type = type;
-
-
     }
 
     @Override
@@ -43,10 +39,6 @@ public class Bullet extends Entity {
         System.out.println(this.toString());
 
         //System.out.println(x + " | " + y);
-
-        /*if(gs.checkForCollisions(x, y, this)){
-            gs.removeObject(this);
-        }*/
 
         if ((x < 0 || x > 800 * (1/gs.tile_size)) || (y < 0 || y > 600 * (1/gs.tile_size))){
             // System.out.println("DELETING...." + this.toString());
