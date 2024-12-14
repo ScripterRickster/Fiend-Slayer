@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import fiend.slayer.FiendSlayer;
+import fiend.slayer.projectiles.Bullet;
 import fiend.slayer.screens.GameScreen;
 
 public class Mob {
@@ -27,9 +28,14 @@ public class Mob {
 
     public boolean sees_player = false;
 
-    Random r = new Random();
+
+    private boolean bullet_spawned = false;
 
     Sprite sprite;
+
+    Random r = new Random();
+
+
     public Mob(final FiendSlayer g,final GameScreen gs,float tx,float ty){
         sprite = new Sprite(new Texture("mob1.png"));
         sprite.setSize(1, 1);
@@ -74,6 +80,11 @@ public class Mob {
 
         Vector2 playerPosition = new Vector2(gs.player.x, gs.player.y);
         sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
+
+        if(r.nextInt(100) <= 100){
+            //if(gs.bullets.size == 0){bullet_spawned =false;}
+            fire_projectile();
+        }
         //System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
     }
 
@@ -95,7 +106,32 @@ public class Mob {
         return true;
     }
 
+    public double getHeadingToPlayer(){
+        float dx = gs.player.x - x;
+        float dy = gs.player.y - y;
+
+        double deg = Math.toDegrees(Math.atan2(dy,dx));
+
+        deg += deg < 0 ? 360 : 0;
+
+        return deg;
+    }
+
+    private void fire_projectile(){
+        if(sees_player && bullet_spawned == false){
+            Bullet b = new Bullet(game,gs,x,y,getHeadingToPlayer(),"mob");
+            System.out.println(this.toString() + "\n" + b.toString());
+            gs.addObject(b);
+            //bullet_spawned = true;
+        }
+    }
+
     public void render(SpriteBatch batch) {
         sprite.draw(batch);
+    }
+
+    @Override
+    public String toString(){
+        return "MOB CORDS | X: " + x + " | Y: " + y;
     }
 }

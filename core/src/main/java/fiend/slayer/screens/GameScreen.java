@@ -9,8 +9,6 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
@@ -21,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
+import fiend.slayer.projectiles.Bullet;
 
 public class GameScreen implements Screen {
 
@@ -34,6 +33,8 @@ public class GameScreen implements Screen {
     public float tile_size;
 
     public MapLayer collisionLayer;
+
+    public Array<Bullet> bullets = new Array<>();
 
     Array<Mob> active_mobs = new Array<>();
 
@@ -65,8 +66,12 @@ public class GameScreen implements Screen {
                 float my = s_loc.getY() * 1/tile_size;
 
 
+                System.out.println("MOB INIT CORDS | X: " + mx + " | Y: "+my);
+
+
                 Mob newMob = new Mob(game,this,mx,my);
                 active_mobs.add(newMob);
+                break;
             }
         }
     }
@@ -110,10 +115,47 @@ public class GameScreen implements Screen {
                             return true;
                         }
                     }
+                }else if(o.getClass() == Bullet.class){
+                    for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+                        Rectangle o_rect = rectangleObject.getRectangle();
+                        Rectangle c_rect = new Rectangle(o_rect.getX() * 1/tile_size, o_rect.getY() * 1/tile_size, o_rect.getWidth() * 1/tile_size, o_rect.getHeight() * 1/tile_size);
+
+
+                        Rectangle bullet_rect = ((Bullet) o).getRectangle();
+                        bullet_rect.setX(x);
+                        bullet_rect.setY(y);
+
+                        //System.out.println("RECT NAME: " + rectangleObject.getName() + " | RECT X: " + c_rect.getX() + " | RECT Y: " + c_rect.getY());
+                        //System.out.println("PLR RECT X: " + plr_rect.getX() + " | PLR RECT Y: " + plr_rect.getY());
+
+                        if (Intersector.overlaps(c_rect, bullet_rect)) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
         return false;
+    }
+
+    public void addObject(Object o){
+        if(o != null){
+            if(o.getClass() == Bullet.class){
+                bullets.add((Bullet)o);
+            }
+        }
+    }
+
+    public void removeObject(Object o){
+        if(o != null){
+            if(o.getClass() == Bullet.class){
+                for(int i=0;i<bullets.size;i++){
+                    if(bullets.get(i) == (Bullet)o){
+                        bullets.removeIndex(i);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -138,6 +180,12 @@ public class GameScreen implements Screen {
             if(r.nextInt(100) <= 5){
                 m.update(delta);
             }
+        }
+
+        for(Bullet b: bullets){
+            b.update(delta);
+            b.render(batch);
+
         }
 
         //
