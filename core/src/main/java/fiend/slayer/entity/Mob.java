@@ -2,12 +2,10 @@ package fiend.slayer.entity;
 
 import java.util.Random;
 
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.screens.GameScreen;
 
-public class Mob {
+public class Mob extends Entity {
 
     final FiendSlayer game;
     final GameScreen gs;
@@ -31,6 +29,8 @@ public class Mob {
 
     Sprite sprite;
     public Mob(final FiendSlayer g,final GameScreen gs,float tx,float ty){
+        super(g, gs);
+        
         sprite = new Sprite(new Texture("mob1.png"));
         sprite.setSize(1, 1);
 
@@ -38,10 +38,6 @@ public class Mob {
         this.gs = gs;
         x = tx; y = ty;
 
-    }
-
-    public Rectangle getRectangle(){
-        return new Rectangle(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
     }
 
     public void update(float delta){
@@ -74,7 +70,7 @@ public class Mob {
 
         Vector2 playerPosition = new Vector2(gs.player.x, gs.player.y);
         sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
-        //System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
+        // System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
     }
 
     private boolean checkLineOfSight(Vector2 start, Vector2 end) {
