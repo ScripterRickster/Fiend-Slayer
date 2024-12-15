@@ -1,7 +1,5 @@
 package fiend.slayer.entity;
 
-import java.util.Random;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,22 +7,22 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
-import fiend.slayer.FiendSlayer;
 import fiend.slayer.projectiles.Bullet;
 import fiend.slayer.screens.GameScreen;
+
+import java.util.Random;
 
 public class Mob extends Entity {
 
     public boolean sees_player = false;
     public float speed = 1;
-    public int hp = 10;
+    public float hp = 10;
 
     Random rand = new Random();
 
 
-    public Mob(final FiendSlayer g,final GameScreen gs,float tx,float ty){
-        super(g, gs,"mob");
+    public Mob(final GameScreen gs, float tx, float ty){
+        super(gs,"mob");
 
         sprite = new Sprite(new Texture("mob1.png"));
         sprite.setSize(1, 1);
@@ -54,7 +52,7 @@ public class Mob extends Entity {
         }
 
 
-        if (gs.checkForCollisions(this)){
+        if (gs.mapCollisionCheck(this)){
             x = prevX;
             y = prevY;
         }
@@ -86,14 +84,17 @@ public class Mob extends Entity {
         return true;
     }
 
-    /*public float getHeadingToPlayer(){
-        return (float) (Math.atan2(gs.player.y - y, gs.player.x - x));
-    }*/
-
     private void fire_projectile(){
         if (sees_player) {
-            Bullet b = new Bullet(game, gs, this, getHeadingToOtherEntity(gs.player));
+            Bullet b = new Bullet(gs, this, getHeading(gs.player));
             gs.bullets.add(b);
+        }
+    }
+
+    public void damage(float dmg) {
+        hp = Math.max(0, hp - dmg);
+        if (hp <= 0) {
+            dead = true;
         }
     }
 

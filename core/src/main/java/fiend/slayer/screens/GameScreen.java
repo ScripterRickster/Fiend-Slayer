@@ -1,8 +1,11 @@
 package fiend.slayer.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -28,7 +31,7 @@ public class GameScreen implements Screen {
 
     public SpriteBatch batch;
     public TiledMap tiledmap;
-    public OrthogonalTiledMapRenderer tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / 16f);
+    public OrthogonalTiledMapRenderer tiledmap_renderer;
     public ExtendViewport viewport;
 
     public float tile_size;
@@ -48,7 +51,7 @@ public class GameScreen implements Screen {
         tiledmap = new TmxMapLoader().load("bluelevel.tmx");
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
 
-        player = new Player(game, this);
+        player = new Player(this);
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
@@ -62,14 +65,20 @@ public class GameScreen implements Screen {
 
                 System.out.println("MOB INIT CORDS | X: " + mx + " | Y: "+my);
 
-                Mob newMob = new Mob(game,this,mx,my);
+                Mob newMob = new Mob(this,mx,my);
                 mobs.add(newMob);
                 //break;
             }
         }
+
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("crosshair.png"));
+        // Set hotspot to the middle of it (0,0 would be the top-left corner)
+        int xHotspot = 8, yHotspot = 8;
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        pixmap.dispose(); // We don't need the pixmap anymore
+        Gdx.graphics.setCursor(cursor);
+
     }
-
-
 
     @Override
     public void render(float delta) {
@@ -92,7 +101,6 @@ public class GameScreen implements Screen {
             }
         }
 
-
         // DRAW HERE
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
@@ -104,8 +112,6 @@ public class GameScreen implements Screen {
         batch.begin();
         //
 
-        player.render(batch);
-
         for (Mob m : mobs) {
             m.render(batch);
         }
@@ -113,6 +119,8 @@ public class GameScreen implements Screen {
         for (Bullet b : bullets){
             b.render(batch);
         }
+
+        player.render(batch);
 
         //
         batch.end();
@@ -139,7 +147,7 @@ public class GameScreen implements Screen {
     public void dispose() { // this is not called automatically
     }
 
-    public boolean checkForCollisions(Entity o) {
+    public boolean mapCollisionCheck(Entity o) {
         if (tiledmap.getLayers().get("collisions") != null) {
             MapObjects objects = tiledmap.getLayers().get("collisions").getObjects();
             for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
