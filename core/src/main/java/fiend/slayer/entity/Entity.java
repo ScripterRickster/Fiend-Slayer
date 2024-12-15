@@ -42,6 +42,6 @@ public abstract class Entity {
         sprite.draw(batch);
     }
 
-    public Vector2 center() { return new Vector2(x - sprite.getWidth()/2, y - sprite.getHeight()/2); }
+    public Vector2 center() { return new Vector2(x + sprite.getWidth()/2, y + sprite.getHeight()/2); }
 
 }

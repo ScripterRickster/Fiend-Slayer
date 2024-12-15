@@ -83,7 +83,7 @@ public class Player extends Entity {
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             Vector2 mpos = gs.viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-            float angle = (float) MathUtils.atan2(mpos.y - y, mpos.x - x);
+            float angle = (float) MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
             Bullet b = new Bullet(gs, this, angle);
             gs.bullets.add(b);
         }
