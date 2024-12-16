@@ -1,12 +1,8 @@
-package fiend.slayer.projectiles;
+package fiend.slayer.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import fiend.slayer.entity.Entity;
-import fiend.slayer.entity.Mob;
-import fiend.slayer.entity.Player;
 import fiend.slayer.screens.GameScreen;
 
 public class Bullet extends Entity {
@@ -14,7 +10,7 @@ public class Bullet extends Entity {
     float heading;
 
     public String type;
-    public float speed = 10;
+    public float speed = 20;
     public float age;
 
     public Entity source_entity;
@@ -25,13 +21,13 @@ public class Bullet extends Entity {
         source_entity = se;
 
         sprite = new Sprite(new Texture("bullet.png"));
-        sprite.setSize(1, 1);
+        autoSpriteSize();
 
-        x = source_entity.x; y = source_entity.y;
+        x = source_entity.center().x; y = source_entity.center().y;
+
         this.heading = heading;
-        sprite.setOrigin(sprite.getX() + sprite.getWidth()/2, sprite.getY() + sprite.getHeight()/2);
+        sprite.setOrigin(0, 0);
         sprite.setRotation(heading * MathUtils.radiansToDegrees);
-        sprite.setPosition(x, y);
 
         //System.out.printf("Bullet X %f Y %f Source X %f Y %f\n", x, y, source_entity.x, source_entity.y);
     }
@@ -63,15 +59,10 @@ public class Bullet extends Entity {
             }
         }
 
-    }
-
-    public void render(SpriteBatch batch) {
-        sprite.draw(batch);
         if ((x < 0 || x > 800 * (1/gs.tile_size)) || (y < 0 || y > 600 * (1/gs.tile_size))){
             dead = true;
         }
 
-        sprite.setPosition(x, y);
     }
 
     @Override

@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
-import fiend.slayer.projectiles.Bullet;
 import fiend.slayer.screens.GameScreen;
+import fiend.slayer.weapons.HeldWeapon;
 
 public class Player extends Entity {
 
@@ -27,13 +26,15 @@ public class Player extends Entity {
 
     Task regenArmor;
 
+    public HeldWeapon held_weapon;
+
     public Player(final GameScreen gs) {
         super(gs,"player");
 
         sprite = new Sprite(new Texture("player.png"));
-        sprite.setSize(1, 1);
-        x = 0; y = 0;
+        autoSpriteSize();
 
+        x = 0; y = 0;
 
         regenArmor = new Task(){
             @Override
@@ -46,6 +47,7 @@ public class Player extends Entity {
         };
         Timer.schedule(regenArmor,0f,15f);
 
+        held_weapon = new HeldWeapon(gs, this);
     }
 
     @Override
@@ -82,10 +84,7 @@ public class Player extends Entity {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            Vector2 mpos = gs.viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-            float angle = (float) MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
-            Bullet b = new Bullet(gs, this, angle);
-            gs.bullets.add(b);
+            held_weapon.fire();
         }
 
         if (gs.mapCollisionCheck(this)) {
@@ -93,8 +92,13 @@ public class Player extends Entity {
             y = prevY;
         }
 
-        sprite.setPosition(x, y);
+    }
 
+    @Override
+    public void draw(SpriteBatch batch) {
+        sprite.setPosition(x, y);
+        sprite.draw(batch);
+        held_weapon.render(batch);
     }
 
     public void damage(float dmg) {
@@ -108,7 +112,6 @@ public class Player extends Entity {
             dead = true;
         }
     }
-
 
     @Override
     public String toString(){

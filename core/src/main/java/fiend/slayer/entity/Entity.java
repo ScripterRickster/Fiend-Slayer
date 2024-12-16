@@ -23,24 +23,23 @@ public abstract class Entity {
         // subclasses are responsible for initializing x, y, and sprite
     }
 
-    public Rectangle getRectangle(){
-        return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-    }
-
     public void update(float delta) {
     }
+
+    public void draw(SpriteBatch batch) {
+        sprite.setPosition(x, y);
+        sprite.draw(batch);
+    }
+
+    public void autoSpriteSize() { sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size); }
+
+    public Rectangle getRectangle(){ return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()); }
 
     public boolean collisionCheck(Entity e){
         return this.getRectangle().overlaps(e.getRectangle());
     }
 
-    public float getHeading(Entity e){
-        return (float) (MathUtils.atan2(e.y-y, e.x-x));
-    }
-
-    public void render(SpriteBatch batch) {
-        sprite.draw(batch);
-    }
+    public float getHeading(Entity e) { return (float) (MathUtils.atan2(e.y-y, e.x-x)); }
 
     public Vector2 center() { return new Vector2(x + sprite.getWidth()/2, y + sprite.getHeight()/2); }
 

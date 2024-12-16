@@ -14,14 +14,15 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
+import fiend.slayer.entity.Bullet;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
-import fiend.slayer.projectiles.Bullet;
 
 import java.util.Random;
 
@@ -39,7 +40,8 @@ public class GameScreen implements Screen {
     public Player player;
     public Array<Bullet> bullets = new Array<>();
     public Array<Mob> mobs = new Array<>();
-    public Random rand = new Random();
+
+    public Cursor cursor;
 
     public GameScreen(final FiendSlayer g) {
         game = g;
@@ -73,11 +75,10 @@ public class GameScreen implements Screen {
 
         Pixmap pixmap = new Pixmap(Gdx.files.internal("crosshair.png"));
         // Set hotspot to the middle of it (0,0 would be the top-left corner)
-        int xHotspot = 8, yHotspot = 8;
-        Cursor cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        int xHotspot = (pixmap.getWidth() + 1 )/2, yHotspot = (pixmap.getHeight() + 1)/2;
+        cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
         pixmap.dispose(); // We don't need the pixmap anymore
         Gdx.graphics.setCursor(cursor);
-
     }
 
     @Override
@@ -85,9 +86,10 @@ public class GameScreen implements Screen {
 
         // UPDATE HERE
         player.update(delta);
+
         for(int i = mobs.size-1; i>=0; --i){
             Mob m = mobs.get(i);
-            if (rand.nextInt(100) <= 5) m.update(delta);
+            if (new Random().nextInt(100) <= 5) m.update(delta);
             if(m.dead){
                 mobs.removeIndex(i);
             }
@@ -112,15 +114,15 @@ public class GameScreen implements Screen {
         batch.begin();
         //
 
-        for (Mob m : mobs) {
-            m.render(batch);
-        }
-
         for (Bullet b : bullets){
-            b.render(batch);
+            b.draw(batch);
         }
 
-        player.render(batch);
+        for (Mob m : mobs) {
+            m.draw(batch);
+        }
+
+        player.draw(batch);
 
         //
         batch.end();
@@ -145,6 +147,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() { // this is not called automatically
+        batch.dispose();
+        cursor.dispose();
+    }
+
+    public Vector2 mousePos() {
+        return viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
     public boolean mapCollisionCheck(Entity o) {

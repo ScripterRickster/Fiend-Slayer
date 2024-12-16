@@ -7,7 +7,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import fiend.slayer.projectiles.Bullet;
 import fiend.slayer.screens.GameScreen;
 
 import java.util.Random;
@@ -25,13 +24,13 @@ public class Mob extends Entity {
         super(gs,"mob");
 
         sprite = new Sprite(new Texture("mob1.png"));
-        sprite.setSize(1, 1);
+        autoSpriteSize();
 
         x = tx; y = ty;
 
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         float prevX = x;
         float prevY = y;
 
@@ -61,9 +60,6 @@ public class Mob extends Entity {
         sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
 
         fire_projectile();
-
-        //System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
-        sprite.setPosition(x, y);
     }
 
     private boolean checkLineOfSight(Vector2 start, Vector2 end) {
