@@ -43,7 +43,7 @@ public class CharacterSelectScreen implements Screen {
     public int map_x,map_y;
 
     public BitmapFont font;
-    Array<Button> char_buttons;
+    //Array<Button> char_buttons;
 
 
 
@@ -51,13 +51,15 @@ public class CharacterSelectScreen implements Screen {
     public CharacterSelectScreen(final FiendSlayer g) {
         this.game = g;
 
-        char_buttons = new Array<>();
+        //char_buttons = new Array<>();
+
+        stage = new Stage();
 
         font = new BitmapFont();
         tiledmap = new TmxMapLoader().load("character_selection.tmx");
         map_prop = tiledmap.getProperties();
 
-        MapObjects objects = tiledmap.getLayers().get("collisions").getObjects();
+        MapObjects objects = tiledmap.getLayers().get("characters").getObjects();
 
         map_x = map_prop.get("width",Integer.class);
         map_y = map_prop.get("height",Integer.class);
@@ -78,6 +80,8 @@ public class CharacterSelectScreen implements Screen {
             String fp_norm = "char_images/"+c_name+".png";
             String fp_hover = "char_images/"+c_name+"h.png";
 
+
+
             Texture char_norm = new Texture(fp_norm);
             Texture char_hover = new Texture(fp_hover);
 
@@ -95,9 +99,15 @@ public class CharacterSelectScreen implements Screen {
             Button char_select_button = new Button(buttonStyle);
 
             char_select_button = new Button(buttonStyle);
-            char_select_button.setPosition(r.getRectangle().getX() * 1/tile_size,r.getRectangle().getY() * 1/tile_size);
+            float rc_x = r.getRectangle().getX();
+            float rc_y = r.getRectangle().getY();
 
-            char_buttons.add(char_select_button);
+            System.out.println(rc_x);
+            System.out.println(rc_y);
+            char_select_button.setPosition(rc_x,rc_y);
+            //System.out.println("X: " + char_select_button.getX() + " | Y: " + char_select_button.getY());
+
+            //char_buttons.add(char_select_button);
 
 
             char_select_button.addListener(new ClickListener() {
@@ -129,6 +139,7 @@ public class CharacterSelectScreen implements Screen {
         tiledmap_renderer.setView((OrthographicCamera) viewport.getCamera());
         tiledmap_renderer.render();
 
+
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             System.out.println("hi");
         }
@@ -140,6 +151,7 @@ public class CharacterSelectScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
+        //stage.getViewport().update(width, height, true);
     }
 
     @Override
