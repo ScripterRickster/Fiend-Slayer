@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import fiend.slayer.screens.GameScreen;
+import fiend.slayer.screens.MainMenuScreen;
 
 public class FiendSlayer extends Game {
 
@@ -25,7 +26,8 @@ public class FiendSlayer extends Game {
         font.setUseIntegerPositions(false);
         font.getData().setScale(viewport.getWorldHeight() / Gdx.graphics.getHeight());
 
-        this.setScreen(new GameScreen(this));
+        this.setScreen(new MainMenuScreen(this));
+        //this.setScreen(new GameScreen(this));
     }
 
     @Override
