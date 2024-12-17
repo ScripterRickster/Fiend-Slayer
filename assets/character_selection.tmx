@@ -4,7 +4,7 @@
  <tileset firstgid="2" source="characters.tsx"/>
  <layer id="1" name="Tile Layer 1" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJztzcEJACAQA8Gc/RdtC+LDgMzCvmeSTOnXcblcLpf7g7tK7m1cLpfLPXMbb0ttAHc=
+   eJztzbENAAAIw7D2/6f5AhgcKbObpEdvx+VyuVwul8vlcrlf3YsHPsUAdQ==
   </data>
  </layer>
  <objectgroup id="2" name="characters">

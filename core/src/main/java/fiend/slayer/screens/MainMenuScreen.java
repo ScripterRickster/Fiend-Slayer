@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -33,7 +32,6 @@ public class MainMenuScreen implements Screen {
     Texture start_hover;
 
     float sx,sy;
-    //public String filePath;
     public MainMenuScreen(FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
@@ -55,22 +53,18 @@ public class MainMenuScreen implements Screen {
         buttonStyle.over = hoverDrawable;
 
         start_button = new Button(buttonStyle);
-        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - start_button.getHeight() / 2f);
+        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
 
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("start clicked");
+                game.setScreen(new CharacterSelectScreen(game));
+                dispose();
             }
         });
 
         stage.addActor(start_button);
-
-
-
-        //filePath = System.getProperty("user.dir");
-
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -80,15 +74,16 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
-        stage.act();
-        stage.draw();
+
         batch.begin();
-        //batch.draw(bg,0,0);
         batch.draw(tr,0,0,sx,sy);
         batch.end();
+        stage.act();
+        stage.draw();
     }
     @Override
     public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
