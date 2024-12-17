@@ -29,6 +29,24 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
 //import fiend.slayer.entity.Player;
 
+
+class InfoPanel{
+    String name;
+    Texture img;
+    int hp,armor,energy;
+    BitmapFont font;
+    public InfoPanel(String name,Texture img,int hp,int armor, int energy,BitmapFont font){
+        this.name = name;
+        this.img = img;
+        this.hp = hp; this.armor = armor; this.energy = energy;
+        this.font = font;
+    }
+
+
+
+
+}
+
 public class CharacterSelectScreen implements Screen {
     final FiendSlayer game;
 
@@ -53,7 +71,8 @@ public class CharacterSelectScreen implements Screen {
 
         //char_buttons = new Array<>();
 
-        stage = new Stage();
+
+
 
         font = new BitmapFont();
         tiledmap = new TmxMapLoader().load("character_selection.tmx");
@@ -69,6 +88,9 @@ public class CharacterSelectScreen implements Screen {
         tile_size = map_prop.get("tilewidth", Integer.class);
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
+
+        stage = new Stage();
+        stage.setViewport(viewport);
 
 
         for(RectangleMapObject r: objects.getByType(RectangleMapObject.class)){
@@ -101,10 +123,11 @@ public class CharacterSelectScreen implements Screen {
             char_select_button = new Button(buttonStyle);
             float rc_x = r.getRectangle().getX();
             float rc_y = r.getRectangle().getY();
+            float rc_w = r.getRectangle().getWidth();
+            float rc_h = r.getRectangle().getHeight();
 
-            System.out.println(rc_x);
-            System.out.println(rc_y);
-            char_select_button.setPosition(rc_x,rc_y);
+            char_select_button.setPosition(rc_x*1/tile_size,rc_y*1/tile_size);
+            char_select_button.setSize(rc_w*1/tile_size,rc_h*1/tile_size);
             //System.out.println("X: " + char_select_button.getX() + " | Y: " + char_select_button.getY());
 
             //char_buttons.add(char_select_button);
@@ -120,6 +143,8 @@ public class CharacterSelectScreen implements Screen {
 
             stage.addActor(char_select_button);
             Gdx.input.setInputProcessor(stage);
+
+
 
         }
 
@@ -150,8 +175,8 @@ public class CharacterSelectScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
-        //stage.getViewport().update(width, height, true);
+        //viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
