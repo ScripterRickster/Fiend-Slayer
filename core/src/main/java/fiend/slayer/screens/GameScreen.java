@@ -2,10 +2,13 @@ package fiend.slayer.screens;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -25,7 +28,11 @@ import fiend.slayer.projectiles.Bullet;
 
 public class GameScreen implements Screen {
 
+    ShapeRenderer s_render;
+
     final FiendSlayer game;
+
+    BitmapFont font;
 
     public SpriteBatch batch;
     public TiledMap tiledmap;
@@ -40,12 +47,18 @@ public class GameScreen implements Screen {
     public Array<Mob> mobs = new Array<>();
     public Random rand = new Random();
 
+    float barWidth = 20f; float barHeight = 10f;
+    float font_size = 2f;
+
     public GameScreen(final FiendSlayer g) {
         game = g;
     }
 
     @Override
     public void show() {
+
+
+        s_render = new ShapeRenderer();
         batch = new SpriteBatch();
         tiledmap = new TmxMapLoader().load("bluelevel.tmx");
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
@@ -54,6 +67,10 @@ public class GameScreen implements Screen {
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
+
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.getData().setScale(font_size);
 
         if (tiledmap != null) {
             MapObjects mob_spawn_locs = tiledmap.getLayers().get("mob_spawning_locations").getObjects();
@@ -112,6 +129,75 @@ public class GameScreen implements Screen {
         }
     }
 
+
+    public void drawPlayerStats() {
+        s_render.setProjectionMatrix(batch.getProjectionMatrix());
+        batch.end();
+
+
+        s_render.setProjectionMatrix(batch.getProjectionMatrix().idt().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+
+        s_render.begin(ShapeRenderer.ShapeType.Line);
+
+        float tmp_bar_height = 40f;
+        float tmp_bar_width = 400f;
+        float padding = 10f;
+
+        float barX = padding;
+        float hp_barY = Gdx.graphics.getHeight() - tmp_bar_height - padding; // Y position from top
+        float armor_barY = hp_barY - tmp_bar_height - padding;
+        float energy_barY = armor_barY - tmp_bar_height - padding;
+
+
+        s_render.setColor(new Color(236 / 255f, 236 / 255f, 236 / 255f, 1f));
+        s_render.rect(barX, hp_barY, tmp_bar_width, tmp_bar_height);
+
+        s_render.rect(barX,armor_barY,tmp_bar_width,tmp_bar_height);
+
+        s_render.rect(barX,energy_barY,tmp_bar_width,tmp_bar_height);
+
+
+        s_render.end();
+        s_render.begin(ShapeRenderer.ShapeType.Filled);
+
+        if(player.hp > 0){
+            float hpPercentage = (float)player.hp / (float)player.maxHP;
+            float hpBarWidth = tmp_bar_width * hpPercentage;
+            s_render.setColor(1,0,0,1);
+            s_render.rect(barX+1, hp_barY+1, hpBarWidth-1, tmp_bar_height-1);
+        }
+
+        if(player.armor > 0){
+            float armorPercentage = (float)player.armor / (float)player.maxArmor;
+            float armorBarWidth = tmp_bar_width * armorPercentage;
+            s_render.setColor(139/255f,137/255f,137/255f,1);
+            s_render.rect(barX+1, armor_barY+1, armorBarWidth-1, tmp_bar_height-1);
+        }
+
+        if(player.energy > 0){
+            float energyPercentage = (float)player.energy / (float)player.maxEnergy;
+            float energyBarWidth = tmp_bar_width * energyPercentage;
+            s_render.setColor(21/255f,109/255f,240/255f,1);
+            s_render.rect(barX+1, energy_barY+1, energyBarWidth-1, tmp_bar_height-1);
+        }
+
+        s_render.end();
+
+        batch.begin();
+
+        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + 5, hp_barY + tmp_bar_height - 5);
+        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + 5, armor_barY + tmp_bar_height - 5);
+        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + 5, energy_barY + tmp_bar_height - 5);
+
+
+
+        batch.end();
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+        batch.begin();
+    }
+
+
     @Override
     public void render(float delta) {
 
@@ -135,6 +221,7 @@ public class GameScreen implements Screen {
 
 
         // DRAW HERE
+
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         viewport.getCamera().position.set(player.x, player.y, 0);
@@ -155,6 +242,7 @@ public class GameScreen implements Screen {
             b.render(batch);
         }
 
+        drawPlayerStats();
         //
         batch.end();
     }

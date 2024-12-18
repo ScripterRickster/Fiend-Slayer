@@ -1,5 +1,7 @@
 package fiend.slayer.screens;
 
+// was going to be something but we decided against not adding in multiple character options
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
