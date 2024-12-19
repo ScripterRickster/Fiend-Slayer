@@ -50,6 +50,8 @@ public class GameScreen implements Screen {
     float barWidth = 20f; float barHeight = 10f;
     float font_size = 2f;
 
+    float osx,osy;
+
     public GameScreen(final FiendSlayer g) {
         game = g;
     }
@@ -67,6 +69,9 @@ public class GameScreen implements Screen {
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
+
+        osx = Gdx.graphics.getWidth();
+        osy = Gdx.graphics.getHeight();
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
@@ -140,9 +145,9 @@ public class GameScreen implements Screen {
 
         s_render.begin(ShapeRenderer.ShapeType.Line);
 
-        float tmp_bar_height = 40f;
-        float tmp_bar_width = 400f;
-        float padding = 10f;
+        float tmp_bar_height = 40f* Gdx.graphics.getWidth()/osx;
+        float tmp_bar_width = 400f* Gdx.graphics.getHeight()/osy;
+        float padding = 10f * Gdx.graphics.getHeight()/osy;
 
         float barX = padding;
         float hp_barY = Gdx.graphics.getHeight() - tmp_bar_height - padding; // Y position from top
@@ -186,9 +191,13 @@ public class GameScreen implements Screen {
 
         batch.begin();
 
-        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + 5, hp_barY + tmp_bar_height - 5);
-        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + 5, armor_barY + tmp_bar_height - 5);
-        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + 5, energy_barY + tmp_bar_height - 5);
+
+
+        float fontPadding = 5 * Gdx.graphics.getHeight()/osy;
+
+        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
+        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPadding, armor_barY + tmp_bar_height - fontPadding);
+        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPadding, energy_barY + tmp_bar_height - fontPadding);
 
 
 
@@ -245,11 +254,19 @@ public class GameScreen implements Screen {
         drawPlayerStats();
         //
         batch.end();
+
+        if(player.hp <= 0){
+            bullets.clear();
+            mobs.clear();
+            game.setScreen(new EndScreen(game));
+            dispose();
+        }
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        font.getData().setScale(font_size * Gdx.graphics.getHeight()/osy);
     }
 
     @Override
@@ -266,6 +283,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() { // this is not called automatically
+        font.dispose();
+        tiledmap_renderer.dispose();
+        batch.dispose();
+        s_render.dispose();
+
     }
 
 }

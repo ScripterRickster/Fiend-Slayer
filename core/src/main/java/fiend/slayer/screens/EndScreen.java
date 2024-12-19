@@ -7,21 +7,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import fiend.slayer.FiendSlayer;
 
-public class MainMenuScreen implements Screen {
+public class EndScreen implements Screen{
+
+
     SpriteBatch batch;
     public BitmapFont font;
     public FiendSlayer game;
     Button start_button;
+    Button exit_button;
     Stage stage;
 
     Texture bg; // bg = background
@@ -31,8 +34,12 @@ public class MainMenuScreen implements Screen {
     Texture start_norm;
     Texture start_hover;
 
+    Texture exit_norm;
+    Texture exit_hover;
+
     float sx,sy;
-    public MainMenuScreen(FiendSlayer g){
+
+    public EndScreen(FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -42,18 +49,30 @@ public class MainMenuScreen implements Screen {
 
         sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
 
-        start_norm = new Texture("start_norm.png");
-        start_hover = new Texture("start_hov.png");
+        start_norm = new Texture("restart_norm.png");
+        start_hover = new Texture("restart_hov.png");
 
-        Drawable normalDrawable = new TextureRegionDrawable(start_norm);
-        Drawable hoverDrawable = new TextureRegionDrawable(start_hover);
+        exit_norm = new Texture("exit_norm.png");
+        exit_hover = new Texture("exit_hov.png");
 
-        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        buttonStyle.up = normalDrawable;
-        buttonStyle.over = hoverDrawable;
+        Drawable start_normalDrawable = new TextureRegionDrawable(start_norm);
+        Drawable start_hoverDrawable = new TextureRegionDrawable(start_hover);
 
-        start_button = new Button(buttonStyle);
+        Drawable exit_normalDrawable = new TextureRegionDrawable(exit_norm);
+        Drawable exit_hoverDrawable = new TextureRegionDrawable(exit_hover);
+
+        Button.ButtonStyle start_buttonStyle = new Button.ButtonStyle();
+        start_buttonStyle.up = start_normalDrawable;
+        start_buttonStyle.over = start_hoverDrawable;
+
+        start_button = new Button(start_buttonStyle);
         start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
+
+        Button.ButtonStyle exit_buttonStyle = new Button.ButtonStyle();
+        exit_buttonStyle.up = exit_normalDrawable;
+        exit_buttonStyle.over = exit_hoverDrawable;
+        exit_button = new Button(exit_buttonStyle);
+        exit_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - start_button.getHeight() / 2f);
 
         start_button.addListener(new ClickListener() {
             @Override
@@ -63,9 +82,18 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        exit_button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.exit(0);
+            }
+        });
+
         stage.addActor(start_button);
+        stage.addActor(exit_button);
         Gdx.input.setInputProcessor(stage);
     }
+
 
     @Override
     public void show() {
@@ -110,4 +138,3 @@ public class MainMenuScreen implements Screen {
         start_hover.dispose();
     }
 }
-

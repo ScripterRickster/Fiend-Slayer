@@ -64,7 +64,7 @@ public class Bullet extends Entity {
                 }else{
                     gs.player.armor--;
                 }
-                System.out.println(gs.player);
+                //System.out.println(gs.player);
                 dead = true;
 
             }else if(source_entity.type == "player"){
@@ -81,11 +81,6 @@ public class Bullet extends Entity {
                     }
                 }
             }
-        }
-
-        if(this.collideWithOtherEntity(gs.player) && dead==false){
-
-
         }
 
 

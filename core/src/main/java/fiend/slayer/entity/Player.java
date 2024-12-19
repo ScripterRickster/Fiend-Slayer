@@ -17,7 +17,7 @@ public class Player extends Entity {
 
     float speed = 8f;
 
-    public int maxHP = 100;
+    public int maxHP = 10;
     public int maxArmor = 10;
     public int maxEnergy = 10;
 
