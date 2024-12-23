@@ -40,7 +40,6 @@ public class Mob extends Entity {
 
         if (sees_player) {
             held_weapon.fire(getHeading(gs.player));
-            System.out.println("qwq");
         }
     }
 
