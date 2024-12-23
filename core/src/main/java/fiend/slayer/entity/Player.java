@@ -5,44 +5,43 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
-
-import fiend.slayer.FiendSlayer;
-import fiend.slayer.projectiles.Bullet;
 import fiend.slayer.screens.GameScreen;
+import fiend.slayer.weapons.HeldWeapon;
 
 public class Player extends Entity {
 
     float speed = 8f;
 
-    public int maxHP = 100;
-    public int maxArmor = 10;
-    public int maxEnergy = 10;
+    public float maxHP = 100;
+    public float maxArmor = 10;
+    public float maxEnergy = 10;
 
-    public int hp = maxHP;
-    public int armor = maxArmor;
-    public int energy = maxEnergy;
+    public float hp = maxHP;
+    public float armor = maxArmor;
+    public float energy = maxEnergy;
 
     public boolean dead = false;
 
-    private boolean headingLeft = false;
-
     Task regenArmor;
 
-    public Player(final FiendSlayer g,final GameScreen gs) {
-        super(g, gs,"player");
+    public HeldWeapon held_weapon;
 
-        sprite = new Sprite(new Texture("player.png"));
-        sprite.setSize(1, 1);
+    public Player(final GameScreen gs) {
+        super(gs);
+
+        sprite = new Sprite(new Texture("entity/blue.png"));
+        autoSpriteSize();
+
         x = 0; y = 0;
-
 
         regenArmor = new Task(){
             @Override
             public void run(){
-                if(dead == false && armor < maxArmor){
+                if(!dead && armor < maxArmor){
                     armor++;
                     System.out.println("Armor Increased");
                 }
@@ -50,80 +49,76 @@ public class Player extends Entity {
         };
         Timer.schedule(regenArmor,0f,15f);
 
-
-
+        held_weapon = new HeldWeapon(gs, this);
+        held_weapon.setWeapon("shotgun");
     }
 
-
-
+    int clicks = 0;
     @Override
     public void update(float delta) {
-
-        if(dead == false){
-            float prevX = x;
-            float prevY = y;
-
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                x += speed * delta;
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                x -= speed * delta;
-                headingLeft = true;
-            }else{
-                headingLeft = false;
-            }
-
-            if (gs.checkForCollisions(this)) {
-                x = prevX;
-                y = prevY;
-            }
-
-            prevX = x;
-            prevY = y;
-
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                y += speed * delta;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                y -= speed  * delta;
-            }
-
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-                if(energy > 0){
-                    float closestHeading = headingLeft == true ? (float) Math.toRadians(180.0) : 0f;
-                    float closestDist = Float.MAX_VALUE;
-                    for(int i=gs.mobs.size - 1; i>=0;--i){
-                        Mob m = gs.mobs.get(i);
-
-                        Vector2 mob_vec = new Vector2(m.x,m.y);
-                        Vector2 plr_vec = new Vector2(x,y);
-                        if(mob_vec.dst(plr_vec) < closestDist){
-                            closestDist = mob_vec.dst(plr_vec);
-                            closestHeading = this.getHeadingToOtherEntity(m);
-                        }
-
-
-                    }
-                    Bullet b = new Bullet(game,gs,this,closestHeading);
-                    gs.bullets.add(b);
-                    energy--;
-                    System.out.println(this);
-                }
-            }
-
-            if (gs.checkForCollisions(this)) {
-                x = prevX;
-                y = prevY;
-            }
-
-            sprite.setPosition(x, y);
-        }else{
+        if (dead) {
             regenArmor.cancel();
+            return;
         }
+
+        float prevX = x;
+        float prevY = y;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            x += speed * delta;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            x -= speed * delta;
+        }
+
+        if (gs.mapCollisionCheck(this)) {
+            x = prevX;
+            y = prevY;
+        }
+
+        prevX = x;
+        prevY = y;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            y += speed * delta;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            y -= speed * delta;
+        }
+
+        held_weapon.update(delta);
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            Vector2 mpos = gs.mousePos();
+            float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
+            held_weapon.fire(angle);
+        }
+
+        if (gs.mapCollisionCheck(this)) {
+            x = prevX;
+            y = prevY;
+        }
+
     }
 
+    @Override
+    public void draw(SpriteBatch batch) {
+        sprite.setPosition(x, y);
+        sprite.draw(batch);
+        held_weapon.render(batch, MathUtils.atan2(gs.mousePos().y - center().y, gs.mousePos().x - center().x));
+    }
 
+    public void damage(float dmg) {
+        if (armor > 0) {
+            armor = Math.max(0, armor - dmg);
+        } else {
+            hp = Math.max(0, hp - dmg);
+        }
+
+        if (hp <= 0) {
+            dead = true;
+        }
+    }
 
     @Override
     public String toString(){

@@ -1,73 +1,52 @@
 package fiend.slayer.entity;
 
-import java.util.Random;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
-import fiend.slayer.FiendSlayer;
-import fiend.slayer.projectiles.Bullet;
 import fiend.slayer.screens.GameScreen;
+import fiend.slayer.weapons.HeldWeapon;
 
 public class Mob extends Entity {
 
-    public boolean sees_player = false;
-    public float speed = 1;
-    public int hp = 10;
+    private boolean sees_player = false;
+    private float speed = 1;
+    private float hp = 10;
+    private HeldWeapon held_weapon;
 
-    public boolean dead = false;
+    public Mob(final GameScreen gs, float tx, float ty){
+        super(gs);
 
-    Random rand = new Random();
-
-
-    public Mob(final FiendSlayer g,final GameScreen gs,float tx,float ty){
-        super(g, gs,"mob");
-
-        sprite = new Sprite(new Texture("mob1.png"));
-        sprite.setSize(1, 1);
+        sprite = new Sprite(new Texture("entity/red.png"));
+        autoSpriteSize();
 
         x = tx; y = ty;
 
+        held_weapon = new HeldWeapon(gs, this);
+        held_weapon.setWeapon("shotgun");
     }
 
-    public void update(float delta){
-        float prevX = x;
-        float prevY = y;
+    @Override
+    public void update(float delta) {
 
-        int xDir = rand.nextInt(3) - 2;
-        int yDir = rand.nextInt(3) - 2;
-
-        if (xDir == 1) {
-            x += speed * delta;
-        } else if (xDir == -1) {
-            x -= speed * delta;
-        }
-
-
-        if (yDir == 1){
-            y += speed * delta;
-        } else if (yDir == -1){
-            y += speed * delta;
-        }
-
-
-        if (gs.checkForCollisions(this)){
-            x = prevX;
-            y = prevY;
-        }
-
-        Vector2 playerPosition = new Vector2(gs.player.x, gs.player.y);
+        Vector2 playerPosition = new Vector2(gs.player.center().x, gs.player.center().y);
         sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
 
-        fire_projectile();
+        held_weapon.update(delta);
+        if (sees_player) {
+            held_weapon.fire(getHeading(gs.player));
+        }
+    }
 
-        //System.out.println("Mob: " + this.toString() + " | Sees Player: " + sees_player);
+    @Override
+    public void draw(SpriteBatch batch) {
         sprite.setPosition(x, y);
+        sprite.draw(batch);
+        held_weapon.render(batch, getHeading(gs.player));
     }
 
     private boolean checkLineOfSight(Vector2 start, Vector2 end) {
@@ -88,14 +67,10 @@ public class Mob extends Entity {
         return true;
     }
 
-    /*public float getHeadingToPlayer(){
-        return (float) (Math.atan2(gs.player.y - y, gs.player.x - x));
-    }*/
-
-    private void fire_projectile(){
-        if (sees_player) {
-            Bullet b = new Bullet(game, gs, this, getHeadingToOtherEntity(gs.player));
-            gs.bullets.add(b);
+    public void damage(float dmg) {
+        hp = Math.max(0, hp - dmg);
+        if (hp <= 0) {
+            dead = true;
         }
     }
 
