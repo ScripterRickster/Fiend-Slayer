@@ -6,13 +6,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
 
 public class MainMenuScreen implements Screen {
 
     final FiendSlayer game;
 
-    SpriteBatch batch;
+    public SpriteBatch batch;
+    public ExtendViewport viewport;
 
     public MainMenuScreen(final FiendSlayer g) {
         this.game = g;
@@ -26,11 +28,11 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
-        game.viewport.apply();
-        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
-        game.batch.begin();
+        viewport.apply();
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+        batch.begin();
 
-        game.batch.end();
+        batch.end();
 
         if (Gdx.input.isTouched()) {
             game.setScreen(new GameScreen(game));
@@ -41,7 +43,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height, true);
+        viewport.update(width, height, true);
     }
 
     @Override
