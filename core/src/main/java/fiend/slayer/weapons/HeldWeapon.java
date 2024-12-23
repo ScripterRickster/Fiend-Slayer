@@ -4,53 +4,89 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import fiend.slayer.entity.Bullet;
+import com.badlogic.gdx.utils.Json;
+import fiend.slayer.entity.BulletBuilder;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.screens.GameScreen;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Random;
+
 public class HeldWeapon {
 
-    final GameScreen gs;
+    private final GameScreen gs;
 
-    public Entity holder;
     private Sprite sprite;
+    private Entity holder;
+    private WeaponData wdata = new WeaponData();
+    private String weapon_id = null;
 
     public HeldWeapon(final GameScreen gs, final Entity holder) {
         this.gs = gs;
         this.holder = holder;
-
-        sprite = new Sprite(new Texture("weapons/bad pistol.png"));
-        sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size);
     }
 
-    public void render(SpriteBatch batch) {
-        float angle = MathUtils.atan2(gs.mousePos().y - holder.center().y, gs.mousePos().x - holder.center().x);
+    public void setWeapon(String wid) {
+        this.weapon_id = wid;
 
-        sprite.setOrigin(holder.center().x - sprite.getWidth() / 2, holder.center().y - sprite.getHeight() / 2);
+        sprite = new Sprite(new Texture("weapons/img/" + weapon_id + ".png"));
+        sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size);
+
+        Json json = new Json();
+        try {
+            wdata = json.fromJson(WeaponData.class, Files.readString(Path.of("weapons/" + weapon_id + ".json")));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        wdata.scale(gs.tile_size);
+    }
+
+    private float time_since_last_fire = 0;
+
+    public void update(float delta) {
+        if (weapon_id == null) return;
+        time_since_last_fire += delta;
+    }
+
+    public void render(SpriteBatch batch, float angle) {
+        if (weapon_id == null) return;
+
         if (-MathUtils.HALF_PI < angle && angle <= MathUtils.HALF_PI) {
             sprite.setFlip(false, false);
-            sprite.setOrigin(0, sprite.getHeight()/2);
-            sprite.setRotation(angle * MathUtils.radiansToDegrees);
-            sprite.setPosition(holder.center().x, holder.y);
+            sprite.setOrigin(wdata.origin.x, wdata.origin.y);
+            sprite.setPosition(holder.center().x, holder.center().y - sprite.getHeight()/2);
         } else {
             sprite.setFlip(true, false);
-            sprite.setOrigin(sprite.getWidth(), sprite.getHeight()/2);
             angle += MathUtils.PI;
-            sprite.setRotation(angle * MathUtils.radiansToDegrees);
-            sprite.setPosition(holder.center().x - sprite.getWidth(), holder.y);
+            sprite.setOrigin(sprite.getWidth() - wdata.origin.x, wdata.origin.y);
+            sprite.setPosition(holder.center().x - sprite.getWidth(), holder.center().y - sprite.getHeight()/2);
         }
+        sprite.setRotation(angle * MathUtils.radiansToDegrees);
 
 //        System.out.printf("HeldWeapon Pos: %f %f\n", sprite.getX(), sprite.getY());
 
         sprite.draw(batch);
     }
 
-    public void fire() {
-        Vector2 mpos = gs.mousePos();
-        float angle = (float) MathUtils.atan2(mpos.y - holder.center().y, mpos.x - holder.center().x);
-        Bullet b = new Bullet(gs, holder, angle);
-        gs.bullets.add(b);
-    }
 
+    public void fire(float angle) {
+        if (weapon_id == null) return;
+
+        Random rand = new Random();
+
+        if (time_since_last_fire < wdata.fire_rate) return;
+        time_since_last_fire = 0;
+
+        for (int i = 0; i < wdata.bullet_count; ++i) {
+            gs.bullets.add(new BulletBuilder(gs, holder)
+                    .heading(angle + wdata.precision * rand.nextFloat(-1, 1))
+                    .muzzleBoost(wdata.muzzle_boost)
+                    .speed(25f * rand.nextFloat(1 - wdata.speed_range, 1 + wdata.speed_range))
+                    .imgPath("weapons/projectiles/basic.png")
+                .buildBullet()
+            );
+        }
+    }
 }

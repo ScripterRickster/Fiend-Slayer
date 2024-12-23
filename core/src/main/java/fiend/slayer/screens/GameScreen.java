@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
                 float mx = s_loc.getX() * 1 / tile_size;
                 float my = s_loc.getY() * 1 / tile_size;
 
-                System.out.println("MOB INIT CORDS | X: " + mx + " | Y: "+my);
+                System.out.println("MOB INIT CORDS | X: " + mx + " | Y: " + my);
 
                 Mob newMob = new Mob(this,mx,my);
                 mobs.add(newMob);
@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        Pixmap pixmap = new Pixmap(Gdx.files.internal("crosshair.png"));
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("gui/crosshair.png"));
         // Set hotspot to the middle of it (0,0 would be the top-left corner)
         int xHotspot = (pixmap.getWidth() + 1 )/2, yHotspot = (pixmap.getHeight() + 1)/2;
         cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
@@ -83,8 +83,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        update(delta);
+        draw();
+    }
 
-        // UPDATE HERE
+    public void update(float delta) {
         player.update(delta);
 
         for(int i = mobs.size-1; i>=0; --i){
@@ -102,11 +105,13 @@ public class GameScreen implements Screen {
                 bullets.removeIndex(i);
             }
         }
+    }
 
-        // DRAW HERE
+    public void draw() {
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         viewport.getCamera().position.set(player.x, player.y, 0);
+
         tiledmap_renderer.setView((OrthographicCamera) viewport.getCamera());
         tiledmap_renderer.render();
 

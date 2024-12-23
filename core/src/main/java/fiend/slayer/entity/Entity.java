@@ -14,11 +14,9 @@ public abstract class Entity {
 
     public boolean dead = false;
     public float x, y;
-    public String type;
 
-    public Entity(final GameScreen gs,String type) {
+    public Entity(final GameScreen gs) {
         this.gs = gs;
-        this.type = type;
 
         // subclasses are responsible for initializing x, y, and sprite
     }
@@ -39,7 +37,7 @@ public abstract class Entity {
         return this.getRectangle().overlaps(e.getRectangle());
     }
 
-    public float getHeading(Entity e) { return (float) (MathUtils.atan2(e.y-y, e.x-x)); }
+    public float getHeading(Entity e) { return (float) (MathUtils.atan2(e.center().y - center().y, e.center().x - center().x)); }
 
     public Vector2 center() { return new Vector2(x + sprite.getWidth()/2, y + sprite.getHeight()/2); }
 

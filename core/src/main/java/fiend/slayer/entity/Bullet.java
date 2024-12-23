@@ -10,26 +10,28 @@ public class Bullet extends Entity {
     float heading;
 
     public String type;
-    public float speed = 20;
+    public float speed = 25f;
     public float age;
 
     public Entity source_entity;
 
-    public Bullet(final GameScreen gs, Entity se, float heading) {
-        super(gs,"bullet");
+    public Bullet(final GameScreen gs, Entity se, String img_path, float heading, float muzzle_boost, float speed) {
+        super(gs);
 
         source_entity = se;
 
-        sprite = new Sprite(new Texture("bullet.png"));
+        sprite = new Sprite(new Texture("weapons/projectiles/basic.png"));
         autoSpriteSize();
 
-        x = source_entity.center().x; y = source_entity.center().y;
+        x = source_entity.center().x - sprite.getWidth()/2; y = source_entity.center().y - sprite.getHeight()/2;
 
         this.heading = heading;
-        sprite.setOrigin(0, 0);
+        sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
         sprite.setRotation(heading * MathUtils.radiansToDegrees);
 
-        //System.out.printf("Bullet X %f Y %f Source X %f Y %f\n", x, y, source_entity.x, source_entity.y);
+        x += muzzle_boost * MathUtils.cos(heading);
+        y += muzzle_boost * MathUtils.sin(heading);
+        this.speed = speed;
     }
 
     @Override

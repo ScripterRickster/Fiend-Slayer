@@ -1,0 +1,10 @@
+{
+  "bullet": "basic",
+  "fire_rate": 0.3,
+  "muzzle_boost": 12,
+  "bullet_count": 1,
+  "origin": {
+    "x": 0,
+    "y": 5
+  }
+}

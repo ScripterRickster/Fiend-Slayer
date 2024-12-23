@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import fiend.slayer.screens.GameScreen;
@@ -29,9 +31,9 @@ public class Player extends Entity {
     public HeldWeapon held_weapon;
 
     public Player(final GameScreen gs) {
-        super(gs,"player");
+        super(gs);
 
-        sprite = new Sprite(new Texture("player.png"));
+        sprite = new Sprite(new Texture("entity/blue.png"));
         autoSpriteSize();
 
         x = 0; y = 0;
@@ -48,8 +50,10 @@ public class Player extends Entity {
         Timer.schedule(regenArmor,0f,15f);
 
         held_weapon = new HeldWeapon(gs, this);
+        held_weapon.setWeapon("shotgun");
     }
 
+    int clicks = 0;
     @Override
     public void update(float delta) {
         if (dead) {
@@ -80,11 +84,14 @@ public class Player extends Entity {
             y += speed * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y -= speed  * delta;
+            y -= speed * delta;
         }
 
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            held_weapon.fire();
+        held_weapon.update(delta);
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            Vector2 mpos = gs.mousePos();
+            float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
+            held_weapon.fire(angle);
         }
 
         if (gs.mapCollisionCheck(this)) {
@@ -98,7 +105,7 @@ public class Player extends Entity {
     public void draw(SpriteBatch batch) {
         sprite.setPosition(x, y);
         sprite.draw(batch);
-        held_weapon.render(batch);
+        held_weapon.render(batch, MathUtils.atan2(gs.mousePos().y - center().y, gs.mousePos().x - center().x));
     }
 
     public void damage(float dmg) {
