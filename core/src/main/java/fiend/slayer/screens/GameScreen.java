@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
     float barWidth = 20f; float barHeight = 10f;
     float font_size = 2f;
 
-    float osx,osy;
+    float osx,osy,scaleFactor;
 
     public GameScreen(final FiendSlayer g) {
         game = g;
@@ -72,6 +72,7 @@ public class GameScreen implements Screen {
 
         osx = Gdx.graphics.getWidth();
         osy = Gdx.graphics.getHeight();
+        scaleFactor = 1f;
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
@@ -193,7 +194,7 @@ public class GameScreen implements Screen {
 
 
 
-        float fontPadding = 5 * Gdx.graphics.getHeight()/osy;
+        float fontPadding = 5 * scaleFactor;
 
         font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
         font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPadding, armor_barY + tmp_bar_height - fontPadding);
@@ -266,8 +267,8 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-
-        font.getData().setScale(font_size * height/osy);
+        scaleFactor = height/osy;
+        font.getData().setScale(font_size * scaleFactor);
     }
 
     @Override
