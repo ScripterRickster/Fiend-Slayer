@@ -77,7 +77,7 @@ public class EndScreen implements Screen{
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new CharacterSelectScreen(game));
+                game.setScreen(new GameScreen(game));
                 dispose();
             }
         });

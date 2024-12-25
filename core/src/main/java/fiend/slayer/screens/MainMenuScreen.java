@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import fiend.slayer.FiendSlayer;
+import fiend.slayer.screens.GameScreen;
 
 public class MainMenuScreen implements Screen {
     SpriteBatch batch;
@@ -58,7 +59,8 @@ public class MainMenuScreen implements Screen {
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new CharacterSelectScreen(game));
+                game.setScreen(new GameScreen(game));
+                //game.setScreen(new CharacterSelectScreen(game));
                 dispose();
             }
         });
