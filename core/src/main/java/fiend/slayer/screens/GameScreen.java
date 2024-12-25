@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -28,7 +29,11 @@ import java.util.Random;
 
 public class GameScreen implements Screen {
 
+    ShapeRenderer s_render;
+
     final FiendSlayer game;
+
+    BitmapFont font;
 
     public SpriteBatch batch;
     public TiledMap tiledmap;
@@ -49,6 +54,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+
+
+        s_render = new ShapeRenderer();
         batch = new SpriteBatch();
         tiledmap = new TmxMapLoader().load("bluelevel.tmx");
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
@@ -57,6 +65,14 @@ public class GameScreen implements Screen {
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
+
+        osx = Gdx.graphics.getWidth();
+        osy = Gdx.graphics.getHeight();
+        scaleFactor = 1f;
+
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.getData().setScale(font_size);
 
         if (tiledmap != null) {
             MapObjects mob_spawn_locs = tiledmap.getLayers().get("mob_spawning_locations").getObjects();
@@ -129,13 +145,23 @@ public class GameScreen implements Screen {
 
         player.draw(batch);
 
+        drawPlayerStats();
         //
         batch.end();
+
+        if(player.hp <= 0){
+            bullets.clear();
+            mobs.clear();
+            game.setScreen(new EndScreen(game));
+            dispose();
+        }
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        scaleFactor = height/osy;
+        font.getData().setScale(font_size * scaleFactor);
     }
 
     @Override
