@@ -267,8 +267,8 @@ public class GameScreen implements Screen {
     }
 
     public boolean mapCollisionCheck(Entity o) {
-        if (tiledmap.getLayers().get("collisions") != null) {
-            MapObjects objects = tiledmap.getLayers().get("collisions").getObjects();
+        if (collideLayer != null) {
+            MapObjects objects = collideLayer.getObjects();
             for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
                 Rectangle map_crect = new Rectangle(rectmapobj.getRectangle().getX() * 1 / tile_size, rectmapobj.getRectangle().getY() * 1 / tile_size,
                         rectmapobj.getRectangle().getWidth() * 1 / tile_size, rectmapobj.getRectangle().getHeight() * 1 / tile_size);
