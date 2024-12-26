@@ -56,6 +56,7 @@ public class GameScreen implements Screen {
 
     MapLayer drawingLayer;
     MapLayer collideLayer;
+    MapLayer mobSpawnLayer;
 
     float osx,osy,scaleFactor;
     float font_size = 2.5f;
@@ -66,7 +67,11 @@ public class GameScreen implements Screen {
 
     public void createNewMap(){
         if (tiledmap != null) {
+            for(TiledMapTileSet r: tiledmap.getTileSets()){
+                System.out.println(r.getName());
+            }
             TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
+            System.out.println(m_ts);
             TiledMapTile walls = m_ts.getTile(1);
 
 
@@ -76,6 +81,14 @@ public class GameScreen implements Screen {
             int boxSize = 25;
             int offsetX = -boxSize / 2;
             int offsetY = -boxSize / 2;
+
+            for(int i=offsetX+1;i<offsetX+boxSize-1;i++){
+                for(int j=offsetY+1; j<offsetY + boxSize-1;j++){
+                    RectangleMapObject m_block = new RectangleMapObject();
+                    m_block.getRectangle().set(i*tile_size,j*tile_size,tile_size,tile_size);
+                    mobSpawnLayer.getObjects().add(m_block);
+                }
+            }
 
             for (int i = offsetX; i < offsetX + boxSize; i++) {
                 for (int j = offsetY; j < offsetY + boxSize; j++) {
@@ -103,6 +116,7 @@ public class GameScreen implements Screen {
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
         collideLayer = tiledmap.getLayers().get("collisions");
         drawingLayer = tiledmap.getLayers().get("main");
+        mobSpawnLayer = tiledmap.getLayers().get("mob_spawning_locations");
 
         createNewMap();
 
@@ -120,15 +134,15 @@ public class GameScreen implements Screen {
         font.getData().setScale(font_size);
 
         if (tiledmap != null) {
-            MapObjects mob_spawn_locs = tiledmap.getLayers().get("mob_spawning_locations").getObjects();
+            MapObjects mob_spawn_locs = mobSpawnLayer.getObjects();
             for (RectangleMapObject rectmapobj : mob_spawn_locs.getByType(RectangleMapObject.class)) {
                 Rectangle s_loc = rectmapobj.getRectangle();
                 float mx = s_loc.getX() * 1 / tile_size;
                 float my = s_loc.getY() * 1 / tile_size;
 
-                System.out.println("MOB INIT CORDS | X: " + mx + " | Y: " + my);
+                //System.out.println("MOB INIT CORDS | X: " + mx + " | Y: " + my);
 
-                Mob newMob = new Mob(this,mx,my);
+                Mob newMob = new Mob(this,mx,my,"basic");
                 mobs.add(newMob);
                 //break;
             }

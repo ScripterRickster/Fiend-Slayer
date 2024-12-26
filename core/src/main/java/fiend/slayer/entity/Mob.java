@@ -1,5 +1,8 @@
 package fiend.slayer.entity;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,26 +11,39 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+
 import fiend.slayer.screens.GameScreen;
 import fiend.slayer.weapons.HeldWeapon;
+import fiend.slayer.weapons.WeaponData;
 
 public class Mob extends Entity {
 
     private boolean sees_player = false;
-    private float speed = 1;
-    private float hp = 10;
-    private HeldWeapon held_weapon;
 
-    public Mob(final GameScreen gs, float tx, float ty){
+    private HeldWeapon held_weapon;
+    private MobData mdata;
+
+
+
+    public Mob(final GameScreen gs, float tx, float ty,String type){
         super(gs);
 
-        sprite = new Sprite(new Texture("entity/red.png"));
+         Json json = new Json();
+        try {
+            mdata = json.fromJson(MobData.class, Files.readString(Path.of("assets/entity/mobs/" + type + ".json")));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        sprite = new Sprite(new Texture("entity/mobs/img/"+mdata.image+".png"));
         autoSpriteSize();
+        scaleSpriteSize(mdata.img_scale);
 
         x = tx; y = ty;
 
         held_weapon = new HeldWeapon(gs, this);
-        held_weapon.setWeapon("shotgun");
+        held_weapon.setWeapon(mdata.weapon);
     }
 
     @Override
@@ -68,8 +84,8 @@ public class Mob extends Entity {
     }
 
     public void damage(float dmg) {
-        hp = Math.max(0, hp - dmg);
-        if (hp <= 0) {
+        mdata.health = Math.max(0, mdata.health - dmg);
+        if (mdata.health <= 0) {
             dead = true;
         }
     }
