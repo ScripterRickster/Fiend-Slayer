@@ -13,7 +13,9 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
@@ -29,6 +31,7 @@ import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 
 import java.util.Random;
+
 
 public class GameScreen implements Screen {
 
@@ -55,20 +58,53 @@ public class GameScreen implements Screen {
     MapLayer collideLayer;
 
     float osx,osy,scaleFactor;
-    float font_size = 3f;
+    float font_size = 2.5f;
 
     public GameScreen(final FiendSlayer g) {
         game = g;
+    }
+
+    public void createNewMap(){
+        if (tiledmap != null) {
+            TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
+            TiledMapTile walls = m_ts.getTile(1);
+
+
+            TiledMapTileLayer d_layer = (TiledMapTileLayer) drawingLayer;
+
+
+            int boxSize = 25;
+            int offsetX = -boxSize / 2;
+            int offsetY = -boxSize / 2;
+
+            for (int i = offsetX; i < offsetX + boxSize; i++) {
+                for (int j = offsetY; j < offsetY + boxSize; j++) {
+
+
+                    if (i == offsetX || i == offsetX + boxSize - 1 || j == offsetY || j == offsetY + boxSize - 1) {
+                        TiledMapTileLayer.Cell nCell = new TiledMapTileLayer.Cell();
+                        nCell.setTile(walls);
+                        d_layer.setCell(i, j, nCell);
+
+                        RectangleMapObject c_block = new RectangleMapObject();
+                        c_block.getRectangle().set(i*tile_size, j*tile_size, tile_size,tile_size);
+                        collideLayer.getObjects().add(c_block);
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void show() {
         s_render = new ShapeRenderer();
         batch = new SpriteBatch();
-        tiledmap = new TmxMapLoader().load("bluelevel.tmx");
+        tiledmap = new TmxMapLoader().load("blank_map.tmx");
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
         collideLayer = tiledmap.getLayers().get("collisions");
         drawingLayer = tiledmap.getLayers().get("main");
+
+        createNewMap();
 
         player = new Player(this);
 
@@ -270,6 +306,7 @@ public class GameScreen implements Screen {
         if (collideLayer != null) {
             MapObjects objects = collideLayer.getObjects();
             for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
+
                 Rectangle map_crect = new Rectangle(rectmapobj.getRectangle().getX() * 1 / tile_size, rectmapobj.getRectangle().getY() * 1 / tile_size,
                         rectmapobj.getRectangle().getWidth() * 1 / tile_size, rectmapobj.getRectangle().getHeight() * 1 / tile_size);
 
