@@ -1,8 +1,5 @@
 package fiend.slayer.entity;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,19 +9,16 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
-
 import fiend.slayer.screens.GameScreen;
 import fiend.slayer.weapons.HeldWeapon;
-import fiend.slayer.weapons.WeaponData;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Mob extends Entity {
 
-    private boolean sees_player = false;
-
     private HeldWeapon held_weapon;
     private MobData mdata;
-
-
 
     public Mob(final GameScreen gs, float tx, float ty,String type){
         super(gs);
@@ -49,7 +43,7 @@ public class Mob extends Entity {
     public void update(float delta) {
 
         Vector2 playerPosition = new Vector2(gs.player.center().x, gs.player.center().y);
-        sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
+        boolean sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
 
         held_weapon.update(delta);
         if (sees_player) {

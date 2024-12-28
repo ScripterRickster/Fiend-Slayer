@@ -14,15 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-
 import fiend.slayer.FiendSlayer;
 
-public class EndScreen implements Screen{
+public class EndScreen implements Screen {
 
 
-    SpriteBatch batch;
     public BitmapFont font;
     public FiendSlayer game;
+    SpriteBatch batch;
     Button start_button;
     Button exit_button;
     Stage stage;
@@ -30,30 +29,30 @@ public class EndScreen implements Screen{
     Texture bg; // bg = background
     TextureRegion tr; // for bg
 
-
     Texture start_norm;
     Texture start_hover;
 
     Texture exit_norm;
     Texture exit_hover;
 
-    float sx,sy;
+    float sx, sy;
 
-    public EndScreen(FiendSlayer g){
+    public EndScreen(FiendSlayer g) {
         stage = new Stage();
         batch = new SpriteBatch();
         font = new BitmapFont();
         game = g;
-        bg = new Texture("StartMenuBackground.jpg");
+        bg = new Texture("ui/StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
 
-        sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
+        sx = Gdx.graphics.getWidth();
+        sy = Gdx.graphics.getHeight();
 
-        start_norm = new Texture("restart_norm.png");
-        start_hover = new Texture("restart_hov.png");
+        start_norm = new Texture("ui/restart_norm.png");
+        start_hover = new Texture("ui/restart_hov.png");
 
-        exit_norm = new Texture("exit_norm.png");
-        exit_hover = new Texture("exit_hov.png");
+        exit_norm = new Texture("ui/exit_norm.png");
+        exit_hover = new Texture("ui/exit_hov.png");
 
         Drawable start_normalDrawable = new TextureRegionDrawable(start_norm);
         Drawable start_hoverDrawable = new TextureRegionDrawable(start_hover);
@@ -104,11 +103,12 @@ public class EndScreen implements Screen{
         ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
-        batch.draw(tr,0,0,sx,sy);
+        batch.draw(tr, 0, 0, sx, sy);
         batch.end();
         stage.act();
         stage.draw();
     }
+
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -126,7 +126,6 @@ public class EndScreen implements Screen{
 
     @Override
     public void hide() {
-
     }
 
     @Override

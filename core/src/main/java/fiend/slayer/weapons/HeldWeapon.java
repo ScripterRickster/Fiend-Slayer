@@ -18,7 +18,7 @@ public class HeldWeapon {
     private final GameScreen gs;
 
     private Sprite sprite;
-    private Entity holder;
+    private final Entity holder;
     private WeaponData wdata = new WeaponData();
     public String weapon_id = null;
 
