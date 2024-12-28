@@ -35,7 +35,7 @@ public class HeldWeapon {
 
         Json json = new Json();
         try {
-            wdata = json.fromJson(WeaponData.class, Files.readString(Path.of("assets/weapons/" + weapon_id + ".json")));
+            wdata = json.fromJson(WeaponData.class, Files.readString(Path.of("weapons/configs/" + weapon_id + ".json")));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

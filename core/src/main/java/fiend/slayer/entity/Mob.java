@@ -31,7 +31,7 @@ public class Mob extends Entity {
 
          Json json = new Json();
         try {
-            mdata = json.fromJson(MobData.class, Files.readString(Path.of("assets/entity/mobs/" + type + ".json")));
+            mdata = json.fromJson(MobData.class, Files.readString(Path.of("entity/mobs/" + type + ".json")));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
