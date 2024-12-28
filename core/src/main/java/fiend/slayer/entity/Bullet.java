@@ -60,10 +60,6 @@ public class Bullet extends Entity {
             }
         }
 
-        if ((x < 0 || x > 800 * (1/gs.tile_size)) || (y < 0 || y > 600 * (1/gs.tile_size))){
-            dead = true;
-        }
-
     }
 
     @Override

@@ -30,6 +30,7 @@ public abstract class Entity {
     }
 
     public void autoSpriteSize() { sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size); }
+    public void scaleSpriteSize(float scale) {sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale); }
 
     public Rectangle getRectangle(){ return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()); }
 
