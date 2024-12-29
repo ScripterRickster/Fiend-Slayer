@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Bullet;
+import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 
@@ -180,4 +181,65 @@ public class GameScreen implements Screen {
         return viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
+    public boolean mapCollisionCheck(Entity o) {
+        if (collideLayer == null) return false;
+
+        MapObjects objects = collideLayer.getObjects();
+        for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
+
+            Rectangle map_crect = new Rectangle(rectmapobj.getRectangle().getX() * 1 / tile_size, rectmapobj.getRectangle().getY() * 1 / tile_size,
+                rectmapobj.getRectangle().getWidth() * 1 / tile_size, rectmapobj.getRectangle().getHeight() * 1 / tile_size);
+
+            Rectangle entity_rect = o.getRectangle();
+            entity_rect.setX(o.x);
+            entity_rect.setY(o.y);
+
+            if (Intersector.overlaps(map_crect, entity_rect)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void createNewMap() {
+        if (tiledmap != null) {
+            for (TiledMapTileSet r : tiledmap.getTileSets()) {
+                System.out.println(r.getName());
+            }
+
+            TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
+            System.out.println(m_ts);
+            TiledMapTile walls = m_ts.getTile(1);
+
+            TiledMapTileLayer d_layer = (TiledMapTileLayer) drawingLayer;
+
+            int boxSize = 25;
+            int offsetX = -boxSize / 2;
+            int offsetY = -boxSize / 2;
+
+            for (int i = 0; i < offsetX + boxSize - 1; i++) {
+                for (int j = 0; j < offsetY + boxSize - 1; j++) {
+                    RectangleMapObject m_block = new RectangleMapObject();
+                    m_block.getRectangle().set(i * tile_size, j * tile_size, tile_size, tile_size);
+                    mobSpawnLayer.getObjects().add(m_block);
+                }
+            }
+
+            for (int i = offsetX; i < offsetX + boxSize; i++) {
+                for (int j = offsetY; j < offsetY + boxSize; j++) {
+                    if (i == offsetX || i == offsetX + boxSize - 1 || j == offsetY || j == offsetY + boxSize - 1) {
+                        TiledMapTileLayer.Cell nCell = new TiledMapTileLayer.Cell();
+                        nCell.setTile(walls);
+                        d_layer.setCell(i, j, nCell);
+
+                        RectangleMapObject c_block = new RectangleMapObject();
+                        c_block.getRectangle().set(i * tile_size, j * tile_size, tile_size, tile_size);
+                        collideLayer.getObjects().add(c_block);
+                    }
+                }
+            }
+        }
+    }
+    
 }
