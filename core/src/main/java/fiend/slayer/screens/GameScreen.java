@@ -81,8 +81,7 @@ public class GameScreen implements Screen {
 
             TiledMapTileLayer d_layer = (TiledMapTileLayer) drawingLayer;
 
-            Chest cst = new Chest(this,12,12,player);
-            chests.add(cst);
+
 
 
             int boxSize = 25;
@@ -129,6 +128,8 @@ public class GameScreen implements Screen {
 
         player = new Player(this);
 
+
+
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
 
@@ -165,11 +166,14 @@ public class GameScreen implements Screen {
         }
 
         Pixmap pixmap = new Pixmap(Gdx.files.internal("gui/crosshair.png"));
-        // Set hotspot to the middle of it (0,0 would be the top-left corner)
+
         int xHotspot = (pixmap.getWidth() + 1 )/2, yHotspot = (pixmap.getHeight() + 1)/2;
         cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
-        pixmap.dispose(); // We don't need the pixmap anymore
+        pixmap.dispose();
         Gdx.graphics.setCursor(cursor);
+
+        Chest cst = new Chest(this,5,5,player);
+        chests.add(cst);
     }
 
     @Override
@@ -207,7 +211,7 @@ public class GameScreen implements Screen {
         for(Chest c: chests){
             c.update(delta);
 
-            if(c.getAlpha() >= 1){
+            if(c.getAlpha() <=0){
                 chests.removeValue(c,false);
             }
         }
@@ -299,6 +303,10 @@ public class GameScreen implements Screen {
 
         for (Chest c: chests) {
             c.draw(batch);
+        }
+
+        for (Loot l: loot) {
+            l.draw(batch);
         }
 
         player.draw(batch);

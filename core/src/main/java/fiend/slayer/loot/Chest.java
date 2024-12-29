@@ -30,12 +30,15 @@ public class Chest extends Entity{
     Task fade;
     public Chest(final GameScreen gs,float px, float py,Player plr){
         super(gs);
+        x = px; y = py;
+        sprite = new Sprite(new Texture("loot/chest_texture.png"));
+        sprite.setPosition(x,y);
+        autoSpriteSize();
         this.gs = gs;
         this.plr = plr;
 
-        sprite = new Sprite(new Texture("assets/loot/chest_texture.png"));
-        autoSpriteSize();
-        x = px; y = py;
+
+
 
         rng = new Random();
 
@@ -49,11 +52,11 @@ public class Chest extends Entity{
             @Override
             public void run(){
                 if(fadeout){
-                  setAlpha(getAlpha()+0.05f);
+                  setAlpha(getAlpha()-0.05f);
                 }
             }
         };
-        Timer.schedule(fade,0f,0.25f);
+
 
     }
 
@@ -70,8 +73,8 @@ public class Chest extends Entity{
                 if(!pathList.isEmpty()){
                     int random_idx = rng.nextInt(pathList.size());
                     wpn = pathList.get(random_idx).getFileName().toString();
-                    wpn = wpn.substring(0,wpn.length()-6);
-                    System.out.println(wpn);
+                    wpn = wpn.substring(0,wpn.length()-5);
+                    gs.loot.add(new Loot(gs,x,y,reward,wpn));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -82,15 +85,11 @@ public class Chest extends Entity{
     @Override
     public void update(float delta){
         if(fadeout == false && collisionCheck(plr)){
+            System.out.println("Collided with player");
             fadeout = true;
+            Timer.schedule(fade,0f,0.25f);
             spawnReward();
         }
-    }
-
-    @Override
-    public void draw(SpriteBatch batch) {
-        sprite.setPosition(x, y);
-        sprite.draw(batch);
     }
 
 

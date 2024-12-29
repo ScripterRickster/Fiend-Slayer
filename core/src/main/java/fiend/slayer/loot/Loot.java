@@ -4,6 +4,7 @@ import fiend.slayer.entity.Entity;
 import fiend.slayer.screens.GameScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Loot extends Entity{
     final GameScreen gs;
@@ -16,6 +17,7 @@ public class Loot extends Entity{
 
         if(t1.equals("weapon")){
             sprite = new Sprite(new Texture("weapons/img/"+t2+".png"));
+            sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size);
         }
     }
 }

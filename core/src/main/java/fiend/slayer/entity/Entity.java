@@ -14,7 +14,7 @@ public abstract class Entity {
 
     public boolean dead = false;
     public float x, y;
-    public float alpha = 0;
+    public float alpha = 1;
 
     public Entity(final GameScreen gs) {
         this.gs = gs;
@@ -38,6 +38,9 @@ public abstract class Entity {
     public Rectangle getRectangle(){ return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()); }
 
     public boolean collisionCheck(Entity e){
+
+        //System.out.println(e + " | " + e.getRectangle());
+        //System.out.println(this + " | " + this.getRectangle());
         return this.getRectangle().overlaps(e.getRectangle());
     }
 
