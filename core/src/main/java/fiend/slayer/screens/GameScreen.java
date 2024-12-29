@@ -29,6 +29,8 @@ import fiend.slayer.entity.Bullet;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
+import fiend.slayer.loot.Chest;
+import fiend.slayer.loot.Loot;
 
 import java.util.Random;
 
@@ -51,6 +53,8 @@ public class GameScreen implements Screen {
     public Player player;
     public Array<Bullet> bullets = new Array<>();
     public Array<Mob> mobs = new Array<>();
+    public Array<Loot> loot = new Array<>();
+    public Array<Chest> chests = new Array<>();
 
     public Cursor cursor;
 
@@ -76,6 +80,9 @@ public class GameScreen implements Screen {
 
 
             TiledMapTileLayer d_layer = (TiledMapTileLayer) drawingLayer;
+
+            Chest cst = new Chest(this,12,12,player);
+            chests.add(cst);
 
 
             int boxSize = 25;
@@ -189,13 +196,24 @@ public class GameScreen implements Screen {
                 bullets.removeIndex(i);
             }
         }
+
+        if(player.hp <= 0){
+            bullets.clear();
+            mobs.clear();
+            game.setScreen(new EndScreen(game));
+            dispose();
+        }
+
+        for(Chest c: chests){
+            c.update(delta);
+
+            if(c.getAlpha() >= 1){
+                chests.removeValue(c,false);
+            }
+        }
     }
 
     public void drawPlayerStats() {
-        s_render.setProjectionMatrix(batch.getProjectionMatrix());
-        batch.end();
-
-
         s_render.setProjectionMatrix(batch.getProjectionMatrix().idt().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
 
@@ -245,21 +263,18 @@ public class GameScreen implements Screen {
 
         s_render.end();
 
-        batch.begin();
-
 
 
         float fontPadding = 5 * scaleFactor;
 
+        batch.begin();
         font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
         font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPadding, armor_barY + tmp_bar_height - fontPadding);
         font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPadding, energy_barY + tmp_bar_height - fontPadding);
-
-
-
         batch.end();
+
+
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        batch.begin();
     }
 
     public void draw() {
@@ -282,18 +297,17 @@ public class GameScreen implements Screen {
             m.draw(batch);
         }
 
+        for (Chest c: chests) {
+            c.draw(batch);
+        }
+
         player.draw(batch);
 
-        drawPlayerStats();
-        //
         batch.end();
 
-        if(player.hp <= 0){
-            bullets.clear();
-            mobs.clear();
-            game.setScreen(new EndScreen(game));
-            dispose();
-        }
+        drawPlayerStats();
+
+
     }
 
     @Override

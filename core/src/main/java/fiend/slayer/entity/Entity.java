@@ -14,6 +14,7 @@ public abstract class Entity {
 
     public boolean dead = false;
     public float x, y;
+    public float alpha = 0;
 
     public Entity(final GameScreen gs) {
         this.gs = gs;
@@ -31,6 +32,8 @@ public abstract class Entity {
 
     public void autoSpriteSize() { sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size); }
     public void scaleSpriteSize(float scale) {sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale); }
+    public void setAlpha(float a) { alpha = a; sprite.setAlpha(alpha);}
+    public float getAlpha() { return alpha;}
 
     public Rectangle getRectangle(){ return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()); }
 
