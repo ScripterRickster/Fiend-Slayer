@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -21,7 +20,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Bullet;
-import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 
@@ -182,25 +180,4 @@ public class GameScreen implements Screen {
         return viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
-    public boolean mapCollisionCheck(Entity o) {
-        if (collideLayer == null) return false;
-
-        MapObjects objects = collideLayer.getObjects();
-        for (RectangleMapObject rectmapobj : objects.getByType(RectangleMapObject.class)) {
-
-            Rectangle map_crect = new Rectangle(rectmapobj.getRectangle().getX() * 1 / tile_size, rectmapobj.getRectangle().getY() * 1 / tile_size,
-                rectmapobj.getRectangle().getWidth() * 1 / tile_size, rectmapobj.getRectangle().getHeight() * 1 / tile_size);
-
-            Rectangle entity_rect = o.getRectangle();
-            entity_rect.setX(o.x);
-            entity_rect.setY(o.y);
-
-            if (Intersector.overlaps(map_crect, entity_rect)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
 }
