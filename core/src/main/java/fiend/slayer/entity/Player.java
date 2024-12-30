@@ -24,6 +24,9 @@ public class Player extends Entity {
     public float armor = maxArmor;
     public float energy = maxEnergy;
 
+
+    public final float pickup_range = 20; // in pixels
+
     public boolean dead = false;
 
     Task regenArmor;
@@ -51,6 +54,14 @@ public class Player extends Entity {
 
         held_weapon = new HeldWeapon(gs, this);
         held_weapon.setWeapon("shotgun");
+    }
+
+    public String getCurrentWeapon(){return held_weapon.getCurrentWeapon();}
+
+    public void changeWeapon(String wpn){
+        if(wpn != null){
+            held_weapon.setWeapon(wpn);
+        }
     }
 
     int clicks = 0;

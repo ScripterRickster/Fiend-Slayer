@@ -1,6 +1,7 @@
 package fiend.slayer.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
@@ -213,6 +214,26 @@ public class GameScreen implements Screen {
 
             if(c.getAlpha() <=0){
                 chests.removeValue(c,false);
+            }
+        }
+
+        if(Gdx.input.isButtonJustPressed(Buttons.RIGHT)){
+            float c_dist = Float.MAX_VALUE;
+            Loot c_loot = null;
+            for(Loot l: loot){
+                float l_dst = l.distanceToEntity(player);
+                if(l_dst < c_dist && l_dst <= player.pickup_range / tile_size ){
+                    c_loot = l;
+                    c_dist = l_dst;
+                }
+            }
+
+            if(c_loot != null){
+                if(c_loot.r_class == "weapon"){
+                    loot.add(new Loot(this,player.x,player.y,"weapon",player.getCurrentWeapon()));
+                    player.changeWeapon(c_loot.r_type);
+                }
+                loot.removeValue(c_loot,false);
             }
         }
     }

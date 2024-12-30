@@ -4,14 +4,18 @@ import fiend.slayer.entity.Entity;
 import fiend.slayer.screens.GameScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 public class Loot extends Entity{
     final GameScreen gs;
+    public final String r_class,r_type;
 
-    public Loot(final GameScreen gs,float px,float py,String t1, String t2){
+    public Loot(final GameScreen gs,float px,float py,final String t1, final String t2){
         super(gs);
         this.gs = gs;
+
+        r_class = t1;
+        r_type = t2;
 
         x = px; y = py;
 
@@ -20,4 +24,6 @@ public class Loot extends Entity{
             sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size);
         }
     }
+
+
 }

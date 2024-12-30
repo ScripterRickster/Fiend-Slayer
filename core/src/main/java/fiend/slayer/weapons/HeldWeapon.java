@@ -43,6 +43,8 @@ public class HeldWeapon {
         wdata.scale(gs.tile_size);
     }
 
+    public String getCurrentWeapon(){return weapon_id;}
+
     private float time_since_last_fire = 0;
 
     public void update(float delta) {

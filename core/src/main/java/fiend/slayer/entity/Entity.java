@@ -37,6 +37,9 @@ public abstract class Entity {
 
     public Rectangle getRectangle(){ return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()); }
 
+    public float distanceToEntity(Entity e){
+        return Math.abs(new Vector2(this.x,this.y).dst(new Vector2(e.x,e.y)));
+    }
     public boolean collisionCheck(Entity e){
 
         //System.out.println(e + " | " + e.getRectangle());
