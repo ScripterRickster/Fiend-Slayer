@@ -42,7 +42,7 @@ public class Chest extends Entity{
 
         rng = new Random();
 
-        if(rng.nextInt(1)+1 == 1){ // weapon or potion
+        if(rng.nextInt(2)+1 == 1){ // weapon or potion
             reward = "weapon";
         }else{
             reward = "potion";
@@ -79,15 +79,20 @@ public class Chest extends Entity{
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(reward.equals("potion")){
+            if(rng.nextInt(2) == 1){
+                gs.loot.add(new Loot(gs,x,y,reward,"hp_potion"));
+            }else{
+                gs.loot.add(new Loot(gs,x,y,reward,"energy_potion"));
+            }
         }
     }
 
     @Override
     public void update(float delta){
         if(fadeout == false && collisionCheck(plr)){
-            System.out.println("Collided with player");
             fadeout = true;
-            Timer.schedule(fade,0f,0.25f);
+            Timer.schedule(fade,0f,0.1f);
             spawnReward();
         }
     }

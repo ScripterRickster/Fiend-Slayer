@@ -232,6 +232,12 @@ public class GameScreen implements Screen {
                 if(c_loot.r_class == "weapon"){
                     loot.add(new Loot(this,player.x,player.y,"weapon",player.getCurrentWeapon()));
                     player.changeWeapon(c_loot.r_type);
+                }else if(c_loot.r_class == "potion"){
+                    if(c_loot.r_type == "hp_potion"){
+                        player.hp = Math.min(player.hp+2,player.maxHP);
+                    }else if(c_loot.r_type == "energy_potion"){
+                        player.energy = Math.min(player.energy+50,player.maxEnergy);
+                    }
                 }
                 loot.removeValue(c_loot,false);
             }

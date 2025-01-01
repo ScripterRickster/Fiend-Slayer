@@ -22,6 +22,9 @@ public class Loot extends Entity{
         if(t1.equals("weapon")){
             sprite = new Sprite(new Texture("weapons/img/"+t2+".png"));
             sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size);
+        }else if(t1.equals("potion")){
+            sprite = new Sprite(new Texture("loot/"+t2+".png"));
+            sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size);
         }
     }
 
