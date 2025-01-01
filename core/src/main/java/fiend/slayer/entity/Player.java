@@ -103,6 +103,7 @@ public class Player extends Entity {
             Vector2 mpos = gs.mousePos();
             float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
             held_weapon.fire(angle);
+            energy = Math.max(0,energy-held_weapon.getCurrentWData().energy_consumption);
         }
 
         if (gs.mapCollisionCheck(this)) {
