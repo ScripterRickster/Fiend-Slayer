@@ -9,8 +9,10 @@ public class MobData {
         weapon = "",
         image = ""
     ;
-    public float img_scale = 0;
-
+    public float
+        exp_val = 0,
+        img_scale = 0
+    ;
 
     public MobData(){}
 }

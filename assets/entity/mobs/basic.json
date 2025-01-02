@@ -3,6 +3,7 @@
     "speed": 2,
     "weapon": "bad pistol",
     "image": "red",
+    "exp_val": 3,
     "img_scale": 1
   }
 

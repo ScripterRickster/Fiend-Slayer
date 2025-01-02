@@ -31,6 +31,7 @@ import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 import fiend.slayer.loot.Chest;
+import fiend.slayer.loot.EXP_Orb;
 import fiend.slayer.loot.Loot;
 
 import java.util.Random;
@@ -56,6 +57,7 @@ public class GameScreen implements Screen {
     public Array<Mob> mobs = new Array<>();
     public Array<Loot> loot = new Array<>();
     public Array<Chest> chests = new Array<>();
+    public Array<EXP_Orb> exp_orbs = new Array<>();
 
     public Cursor cursor;
 
@@ -72,9 +74,9 @@ public class GameScreen implements Screen {
 
     public void createNewMap(){
         if (tiledmap != null) {
-            for(TiledMapTileSet r: tiledmap.getTileSets()){
+            /*for(TiledMapTileSet r: tiledmap.getTileSets()){
                 System.out.println(r.getName());
-            }
+            }*/
             TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
             System.out.println(m_ts);
             TiledMapTile walls = m_ts.getTile(1);
@@ -209,12 +211,16 @@ public class GameScreen implements Screen {
             dispose();
         }
 
-        for(Chest c: chests){
+        for (Chest c: chests) {
             c.update(delta);
 
-            if(c.getAlpha() <=0){
+            if (c.getAlpha() <=0) {
                 chests.removeValue(c,false);
             }
+        }
+
+        for (EXP_Orb exp: exp_orbs) {
+            exp.update(delta);
         }
 
         if(Gdx.input.isButtonJustPressed(Buttons.RIGHT)){
@@ -334,6 +340,10 @@ public class GameScreen implements Screen {
 
         for (Loot l: loot) {
             l.draw(batch);
+        }
+
+        for (EXP_Orb exp: exp_orbs) {
+            exp.draw(batch);
         }
 
         player.draw(batch);
