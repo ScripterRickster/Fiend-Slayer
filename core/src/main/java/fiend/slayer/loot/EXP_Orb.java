@@ -33,7 +33,7 @@ public class EXP_Orb extends Entity{
          moveToPlr = new Task(){
             @Override
             public void run() {
-                speed += 0.75;
+                speed += 0.01;
                 float heading = getHeading(plr);
                 x += Math.cos((double)heading) * speed;
                 y += Math.sin((double)heading) * speed;
@@ -53,7 +53,7 @@ public class EXP_Orb extends Entity{
         if (plr.distanceToEntity(this) <= (plr.pickup_range / gs.tile_size)) {
             if (func_running == false) {
                 func_running = true;
-                Timer.schedule(moveToPlr,0f,0.25f);
+                Timer.schedule(moveToPlr,0f,delta);
             }
         }
     }
