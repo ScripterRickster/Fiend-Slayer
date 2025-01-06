@@ -53,7 +53,7 @@ public class Player extends Entity {
         Timer.schedule(regenArmor,0f,15f);
 
         held_weapon = new HeldWeapon(gs, this);
-        held_weapon.setWeapon("bad pistol");
+        held_weapon.setWeapon("ak-47");
     }
 
     public String getCurrentWeapon(){return held_weapon.getCurrentWeapon();}

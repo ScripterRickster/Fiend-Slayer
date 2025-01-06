@@ -93,7 +93,7 @@ public class Mob extends Entity {
         float xpos = x + rng.nextFloat() * sprite.getX() / gs.tile_size;
         float ypos = y + rng.nextFloat() * sprite.getY() / gs.tile_size;
 
-        gs.exp_orbs.add(new EXP_Orb(gs,xpos,ypos,mdata.exp_val));
+        gs.exp_orbs.add(new EXP_Orb(gs,xpos,ypos,1));
 
     }
 
@@ -101,7 +101,9 @@ public class Mob extends Entity {
         mdata.health = Math.max(0, mdata.health - dmg);
         if (mdata.health <= 0) {
             dead = true;
-            spawn_exp_orb();
+            for(int i=0;i<mdata.exp_val;i++){
+                spawn_exp_orb();
+            }
         }
     }
 
