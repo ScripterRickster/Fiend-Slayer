@@ -5,10 +5,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
 
-import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Player;
 import fiend.slayer.screens.GameScreen;
