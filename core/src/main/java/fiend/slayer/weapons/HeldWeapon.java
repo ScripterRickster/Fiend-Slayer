@@ -42,7 +42,7 @@ public class HeldWeapon {
         Json json = new Json();
         try {
             wdata = json.fromJson(WeaponData.class, Files.readString(Path.of("weapons/configs/" + weapon_id + ".json")));
-            sfx = Gdx.audio.newSound(Gdx.files.internal("weapons/configs/"+weapon_id+".mp3"));
+            sfx = Gdx.audio.newSound(Gdx.files.internal("weapons/sounds/"+weapon_id+".mp3"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
