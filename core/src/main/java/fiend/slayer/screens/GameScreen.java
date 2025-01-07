@@ -3,6 +3,7 @@ package fiend.slayer.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -68,6 +69,9 @@ public class GameScreen implements Screen {
     float osx,osy,scaleFactor;
     float font_size = 2.5f;
 
+    Sound pickup_sfx;
+    long pickup_sfx_id;
+
     public GameScreen(final FiendSlayer g) {
         game = g;
     }
@@ -130,6 +134,9 @@ public class GameScreen implements Screen {
         createNewMap();
 
         player = new Player(this);
+
+
+        pickup_sfx = Gdx.audio.newSound(Gdx.files.internal("loot/sounds/pickup_item.mp3"));
 
 
 
@@ -245,6 +252,8 @@ public class GameScreen implements Screen {
                         player.energy = Math.min(player.energy+50,player.maxEnergy);
                     }
                 }
+                pickup_sfx_id = pickup_sfx.play();
+                pickup_sfx.setLooping(pickup_sfx_id, false);
                 loot.removeValue(c_loot,false);
             }
         }
