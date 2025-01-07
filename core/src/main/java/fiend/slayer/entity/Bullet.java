@@ -56,6 +56,7 @@ public class Bullet extends Entity {
         y += (float) (speed * MathUtils.sin(heading) * delta);
 
         if (gs.mapCollisionCheck(this)) {
+            playHitSFX();
             dead = true;
         }
 
