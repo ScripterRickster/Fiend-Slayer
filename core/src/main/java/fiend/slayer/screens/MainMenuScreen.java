@@ -2,13 +2,16 @@ package fiend.slayer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -31,6 +34,13 @@ public class MainMenuScreen implements Screen {
     Texture start_norm;
     Texture start_hover;
 
+    Sound b_click;
+    long b_click_id;
+    Sound b_hover;
+    long b_hover_id;
+
+    boolean mouse_on_button = false;
+
     float sx,sy;
     public MainMenuScreen(FiendSlayer g){
         stage = new Stage();
@@ -39,6 +49,9 @@ public class MainMenuScreen implements Screen {
         game = g;
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
+
+        b_click = Gdx.audio.newSound(Gdx.files.internal("gui/sounds/b_click.mp3"));
+        b_hover = Gdx.audio.newSound(Gdx.files.internal("gui/sounds/b_hover.mp3"));
 
         sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
 
@@ -58,12 +71,31 @@ public class MainMenuScreen implements Screen {
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
-                //game.setScreen(new CharacterSelectScreen(game));
-                dispose();
+                try{
+                    b_click_id = b_click.play();
+                    b_click.setLooping(b_click_id, false);
+                    game.setScreen(new GameScreen(game));
+                    //game.setScreen(new CharacterSelectScreen(game));
+                    dispose();
+                }catch(Exception e){
+                    System.out.println(e);
+                }
             }
         });
 
+        start_button.addListener(new InputListener() {
+            public boolean mouseMoved(InputEvent evt, float ax, float ay){
+                if(mouse_on_button == false){
+                    mouse_on_button = true;
+                    b_hover_id = b_hover.play();
+                    b_hover.setLooping(b_click_id, false);
+                }
+                return true;
+            }
+            public void exit(InputEvent evt, float ax, float ay,int pointer, Actor toActor){
+                mouse_on_button = false;
+            }
+        });
         stage.addActor(start_button);
         Gdx.input.setInputProcessor(stage);
     }
@@ -109,5 +141,7 @@ public class MainMenuScreen implements Screen {
         bg.dispose();
         start_norm.dispose();
         start_hover.dispose();
+        b_click.dispose();
+        b_hover.dispose();
     }
 }

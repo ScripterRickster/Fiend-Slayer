@@ -2,12 +2,15 @@ package fiend.slayer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -37,6 +40,14 @@ public class EndScreen implements Screen{
     Texture exit_norm;
     Texture exit_hover;
 
+    Sound b_click;
+    long b_click_id;
+    Sound b_hover;
+    long b_hover_id;
+
+    boolean mouse_on_sbutton = false;
+    boolean mouse_on_ebutton = false;
+
     float sx,sy;
 
     public EndScreen(FiendSlayer g){
@@ -46,6 +57,9 @@ public class EndScreen implements Screen{
         game = g;
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
+
+        b_click = Gdx.audio.newSound(Gdx.files.internal("gui/sounds/b_click.mp3"));
+        b_hover = Gdx.audio.newSound(Gdx.files.internal("gui/sounds/b_hover.mp3"));
 
         sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
 
@@ -77,8 +91,29 @@ public class EndScreen implements Screen{
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
-                dispose();
+                try{
+                    b_click_id = b_click.play();
+                    b_click.setLooping(b_click_id, false);
+                    game.setScreen(new GameScreen(game));
+                    //game.setScreen(new CharacterSelectScreen(game));
+                    dispose();
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+            }
+        });
+
+        start_button.addListener(new InputListener() {
+            public boolean mouseMoved(InputEvent evt, float ax, float ay){
+                if(mouse_on_sbutton == false){
+                    mouse_on_sbutton = true;
+                    b_hover_id = b_hover.play();
+                    b_hover.setLooping(b_click_id, false);
+                }
+                return true;
+            }
+            public void exit(InputEvent evt, float ax, float ay,int pointer, Actor toActor){
+                mouse_on_sbutton = false;
             }
         });
 
@@ -86,6 +121,20 @@ public class EndScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.exit(0);
+            }
+        });
+
+        exit_button.addListener(new InputListener() {
+            public boolean mouseMoved(InputEvent evt, float ax, float ay){
+                if(mouse_on_ebutton == false){
+                    mouse_on_ebutton = true;
+                    b_hover_id = b_hover.play();
+                    b_hover.setLooping(b_click_id, false);
+                }
+                return true;
+            }
+            public void exit(InputEvent evt, float ax, float ay,int pointer, Actor toActor){
+                mouse_on_ebutton = false;
             }
         });
 
@@ -136,5 +185,7 @@ public class EndScreen implements Screen{
         bg.dispose();
         start_norm.dispose();
         start_hover.dispose();
+        b_click.dispose();
+        b_hover.dispose();
     }
 }
