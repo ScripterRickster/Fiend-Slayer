@@ -402,6 +402,7 @@ public class GameScreen implements Screen {
         font.dispose();
         s_render.dispose();
         tiledmap.dispose();
+        tiledmap_renderer.dispose();
     }
 
     public Vector2 mousePos() {
