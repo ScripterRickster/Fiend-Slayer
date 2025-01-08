@@ -2,6 +2,7 @@ package fiend.slayer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,10 +35,8 @@ public class MainMenuScreen implements Screen {
     Texture start_norm;
     Texture start_hover;
 
-    Sound b_click;
-    long b_click_id;
-    Sound b_hover;
-    long b_hover_id;
+    Music b_click;
+    Music b_hover;
 
     boolean mouse_on_button = false;
 
@@ -50,8 +49,8 @@ public class MainMenuScreen implements Screen {
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
 
-        b_click = Gdx.audio.newSound(Gdx.files.internal("gui/sounds/b_click.mp3"));
-        b_hover = Gdx.audio.newSound(Gdx.files.internal("gui/sounds/b_hover.mp3"));
+        b_click = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_click.mp3"));
+        b_hover = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_hover.mp3"));
 
         sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
 
@@ -72,8 +71,8 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try{
-                    b_click_id = b_click.play();
-                    b_click.setLooping(b_click_id, false);
+                    b_click.play();
+                    b_click.setLooping(false);
                     game.setScreen(new GameScreen(game));
                     //game.setScreen(new CharacterSelectScreen(game));
                     dispose();
@@ -87,8 +86,8 @@ public class MainMenuScreen implements Screen {
             public boolean mouseMoved(InputEvent evt, float ax, float ay){
                 if(mouse_on_button == false){
                     mouse_on_button = true;
-                    b_hover_id = b_hover.play();
-                    b_hover.setLooping(b_click_id, false);
+                    b_hover.play();
+                    b_hover.setLooping(false);
                 }
                 return true;
             }
