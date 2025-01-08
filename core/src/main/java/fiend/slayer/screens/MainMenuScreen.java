@@ -1,5 +1,6 @@
 package fiend.slayer.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -73,7 +74,10 @@ public class MainMenuScreen implements Screen {
                 try{
                     b_click.play();
                     b_click.setLooping(false);
-                    game.setScreen(new GameScreen(game));
+
+                    GameScreen gstest = new GameScreen(game);
+                    System.out.println(gstest);
+                    game.setScreen(gstest);
                     //game.setScreen(new CharacterSelectScreen(game));
                     dispose();
                 }catch(Exception e){

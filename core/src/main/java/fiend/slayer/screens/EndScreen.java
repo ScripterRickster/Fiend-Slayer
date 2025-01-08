@@ -94,7 +94,16 @@ public class EndScreen implements Screen{
                     b_click.play();
                     b_click.setLooping(false);
 
-                    game.setScreen(new GameScreen(game));
+
+                    MainMenuScreen stest = new MainMenuScreen(game);
+                    System.out.println(stest.toString());
+
+
+
+
+
+                    //game.setScreen(new MainMenuScreen(game));
+                    game.setScreen(stest);
                     dispose();
                     //game.setScreen(new CharacterSelectScreen(game));
 
