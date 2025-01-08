@@ -208,7 +208,7 @@ public class GameScreen implements Screen {
             Bullet b = bullets.get(i);
             b.update(delta);
             if (b.dead) {
-                b.hit_fx.dispose();
+                b.disposeSounds();
                 bullets.removeIndex(i);
             }
         }

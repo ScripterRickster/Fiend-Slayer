@@ -1,6 +1,7 @@
 package fiend.slayer.entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,15 +18,14 @@ public class Bullet extends Entity {
 
     public Entity source_entity;
 
-    Sound hit_fx;
-    long hit_fx_id;
+    Music hit_fx;
 
     public Bullet(final GameScreen gs, Entity se, String img_path, float heading, float muzzle_boost, float speed) {
         super(gs);
 
         source_entity = se;
 
-        hit_fx = Gdx.audio.newSound(Gdx.files.internal("weapons/bullet_hit.mp3"));
+        hit_fx = Gdx.audio.newMusic(Gdx.files.internal("weapons/bullet_hit.mp3"));
 
 
         sprite = new Sprite(new Texture("weapons/projectiles/basic.png"));
@@ -43,8 +43,8 @@ public class Bullet extends Entity {
     }
 
     public void playHitSFX(){
-        hit_fx_id = hit_fx.play();
-        hit_fx.setLooping(hit_fx_id, false);
+        hit_fx.play();
+        hit_fx.setLooping(false);
     }
 
 

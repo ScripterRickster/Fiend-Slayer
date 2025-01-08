@@ -92,6 +92,7 @@ public class EndScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 try{
                     b_click.play();
+                    b_click.setLooping(false);
                     game.setScreen(new GameScreen(game));
                     //game.setScreen(new CharacterSelectScreen(game));
                     dispose();
