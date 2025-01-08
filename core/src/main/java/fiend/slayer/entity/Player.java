@@ -46,7 +46,7 @@ public class Player extends Entity {
             public void run(){
                 if(!dead && armor < maxArmor){
                     armor++;
-                    System.out.println("Armor Increased");
+                    //System.out.println("Armor Increased");
                 }
             }
         };
