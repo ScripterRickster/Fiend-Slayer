@@ -108,4 +108,8 @@ public class HeldWeapon {
             );
         }
     }
+
+    public void disposeSounds(){
+        sfx.dispose();
+    }
 }

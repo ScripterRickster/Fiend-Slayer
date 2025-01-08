@@ -84,6 +84,10 @@ public class Bullet extends Entity {
 
     }
 
+    public void disposeSounds(){
+        hit_fx.dispose();
+    }
+
     @Override
     public String toString(){ return "BULLET POS | X: " + x + " | Y: " + y + " | HEADING: " + heading; }
 }

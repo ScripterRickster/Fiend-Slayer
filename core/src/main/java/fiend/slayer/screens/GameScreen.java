@@ -208,6 +208,7 @@ public class GameScreen implements Screen {
             Bullet b = bullets.get(i);
             b.update(delta);
             if (b.dead) {
+                b.hit_fx.dispose();
                 bullets.removeIndex(i);
             }
         }
@@ -257,9 +258,17 @@ public class GameScreen implements Screen {
         try{
             if(player.hp <= 0){
                 bullets.clear();
+                for(Bullet bt: bullets){
+                    bt.disposeSounds();
+                    bullets.removeValue(bt, false);
+                }
+
                 mobs.clear();
                 exp_orbs.clear();
-                chests.clear();
+                for(Chest ct: chests){
+                    ct.disposeSounds();
+                    chests.removeValue(ct, false);
+                }
                 loot.clear();
                 game.setScreen(new EndScreen(game));
                 dispose();

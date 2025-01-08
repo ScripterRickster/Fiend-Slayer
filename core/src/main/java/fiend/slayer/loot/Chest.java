@@ -104,6 +104,10 @@ public class Chest extends Entity{
         }
     }
 
+    public void disposeSounds(){
+        open_sfx.dispose();
+    }
+
 
 
 }
