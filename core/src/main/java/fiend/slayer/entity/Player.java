@@ -99,7 +99,7 @@ public class Player extends Entity {
         }
 
         held_weapon.update(delta);
-        if(held_weapon.getCurrentWeaponData().is_auto){
+        if(held_weapon.getCurrentWeaponData().is_auto_fire){
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 fire_current_weapon();
             }
