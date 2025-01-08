@@ -74,12 +74,12 @@ public class MainMenuScreen implements Screen {
                 try{
                     b_click.play();
                     b_click.setLooping(false);
+                    dispose();
 
                     GameScreen gstest = new GameScreen(game);
-                    System.out.println(gstest);
                     game.setScreen(gstest);
                     //game.setScreen(new CharacterSelectScreen(game));
-                    dispose();
+
                 }catch(Exception e){
                     System.out.println(e);
                 }

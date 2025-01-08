@@ -93,6 +93,7 @@ public class EndScreen implements Screen{
                 try{
                     b_click.play();
                     b_click.setLooping(false);
+                    dispose();
 
 
                     MainMenuScreen stest = new MainMenuScreen(game);
@@ -104,7 +105,7 @@ public class EndScreen implements Screen{
 
                     //game.setScreen(new MainMenuScreen(game));
                     game.setScreen(stest);
-                    dispose();
+
                     //game.setScreen(new CharacterSelectScreen(game));
 
                 }catch(Exception e){

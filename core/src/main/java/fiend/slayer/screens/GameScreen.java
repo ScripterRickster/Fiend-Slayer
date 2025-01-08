@@ -257,7 +257,6 @@ public class GameScreen implements Screen {
 
         try{
             if(player.hp <= 0){
-                bullets.clear();
                 for(Bullet bt: bullets){
                     bt.disposeSounds();
                     bullets.removeValue(bt, false);
@@ -270,8 +269,9 @@ public class GameScreen implements Screen {
                     chests.removeValue(ct, false);
                 }
                 loot.clear();
-                game.setScreen(new EndScreen(game));
                 dispose();
+                game.setScreen(new EndScreen(game));
+
             }
         }catch(Exception e){
             System.out.println(e);
