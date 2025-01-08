@@ -14,6 +14,7 @@ public class WeaponData {
         energy_consumption = 0,
         speed_range = 0.05f
     ;
+    public boolean is_auto = false;
 
     public WeaponData() {}
 

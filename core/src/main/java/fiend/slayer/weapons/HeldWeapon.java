@@ -51,6 +51,7 @@ public class HeldWeapon {
     }
 
     public String getCurrentWeapon(){return weapon_id;}
+    public WeaponData getCurrentWeaponData(){return wdata;}
 
     private float time_since_last_fire = 0;
 

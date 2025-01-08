@@ -99,17 +99,28 @@ public class Player extends Entity {
         }
 
         held_weapon.update(delta);
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            Vector2 mpos = gs.mousePos();
-            float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
-            held_weapon.fire(angle);
+        if(held_weapon.getCurrentWeaponData().is_auto){
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                fire_current_weapon();
+            }
+        }else{
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+                fire_current_weapon();
+            }
         }
+
 
         if (gs.mapCollisionCheck(this)) {
             x = prevX;
             y = prevY;
         }
 
+    }
+
+    public void fire_current_weapon(){
+        Vector2 mpos = gs.mousePos();
+        float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
+        held_weapon.fire(angle);
     }
 
     @Override
