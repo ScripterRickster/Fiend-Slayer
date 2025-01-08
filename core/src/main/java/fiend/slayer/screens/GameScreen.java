@@ -211,12 +211,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        if(player.hp <= 0){
-            bullets.clear();
-            mobs.clear();
-            game.setScreen(new EndScreen(game));
-            dispose();
-        }
+
 
         for (Chest c: chests) {
             c.update(delta);
@@ -257,6 +252,22 @@ public class GameScreen implements Screen {
                 loot.removeValue(c_loot,false);
             }
         }
+
+        try{
+            if(player.hp <= 0){
+                bullets.clear();
+                mobs.clear();
+                exp_orbs.clear();
+                chests.clear();
+                loot.clear();
+                game.setScreen(new EndScreen(game));
+                dispose();
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+
     }
 
     public void drawPlayerStats() {
@@ -387,6 +398,9 @@ public class GameScreen implements Screen {
     public void dispose() { // this is not called automatically
         batch.dispose();
         cursor.dispose();
+        pickup_sfx.dispose();
+        font.dispose();
+        s_render.dispose();
     }
 
     public Vector2 mousePos() {

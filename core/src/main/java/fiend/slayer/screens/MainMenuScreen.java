@@ -143,5 +143,6 @@ public class MainMenuScreen implements Screen {
         start_hover.dispose();
         b_click.dispose();
         b_hover.dispose();
+        font.dispose();
     }
 }
