@@ -261,7 +261,6 @@ public class GameScreen implements Screen {
                     bt.disposeSounds();
                     bullets.removeValue(bt, false);
                 }
-
                 mobs.clear();
                 exp_orbs.clear();
                 for(Chest ct: chests){
@@ -269,8 +268,8 @@ public class GameScreen implements Screen {
                     chests.removeValue(ct, false);
                 }
                 loot.clear();
-                dispose();
                 game.setScreen(new EndScreen(game));
+                dispose();
 
             }
         }catch(Exception e){
