@@ -401,11 +401,13 @@ public class GameScreen implements Screen {
     public void dispose() { // this is not called automatically
         batch.dispose();
         cursor.dispose();
-        pickup_sfx.dispose();
         font.dispose();
         s_render.dispose();
         tiledmap.dispose();
         tiledmap_renderer.dispose();
+
+        pickup_sfx.stop();
+        pickup_sfx.dispose();
     }
 
     public Vector2 mousePos() {

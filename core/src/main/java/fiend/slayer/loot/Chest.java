@@ -105,6 +105,7 @@ public class Chest extends Entity{
     }
 
     public void disposeSounds(){
+        open_sfx.stop();
         open_sfx.dispose();
     }
 

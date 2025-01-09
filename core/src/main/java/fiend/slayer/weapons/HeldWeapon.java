@@ -110,6 +110,7 @@ public class HeldWeapon {
     }
 
     public void disposeSounds(){
+        sfx.stop();
         sfx.dispose();
     }
 }
