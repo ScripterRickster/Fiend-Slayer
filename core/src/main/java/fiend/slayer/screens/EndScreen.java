@@ -79,13 +79,14 @@ public class EndScreen implements Screen{
 
         start_button = new Button(start_buttonStyle);
         start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
+        start_button.setScale(game.ui_scale_factor);
 
         Button.ButtonStyle exit_buttonStyle = new Button.ButtonStyle();
         exit_buttonStyle.up = exit_normalDrawable;
         exit_buttonStyle.over = exit_hoverDrawable;
         exit_button = new Button(exit_buttonStyle);
         exit_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - start_button.getHeight() / 2f);
-
+        exit_button.setScale(game.ui_scale_factor);
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
