@@ -176,8 +176,6 @@ public class EndScreen implements Screen{
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
         game.ui_scale_factor = height/game.osy;
-        start_button.setScale(game.ui_scale_factor);
-        exit_button.setScale(game.ui_scale_factor);
     }
 
     @Override
