@@ -25,7 +25,7 @@ import fiend.slayer.FiendSlayer;
 public class MainMenuScreen implements Screen {
     SpriteBatch batch;
     //public BitmapFont font;
-    public FiendSlayer game;
+    final FiendSlayer game;
     Button start_button;
     Stage stage;
 
@@ -44,7 +44,7 @@ public class MainMenuScreen implements Screen {
     float tsx,tsy;
 
 
-    public MainMenuScreen(FiendSlayer g){
+    public MainMenuScreen(final FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
         //font = new BitmapFont();
@@ -77,9 +77,7 @@ public class MainMenuScreen implements Screen {
                 try{
                     b_click.play();
                     b_click.setLooping(false);
-
-                    GameScreen gstest = new GameScreen(game);
-                    game.setScreen(gstest);
+                    game.setScreen(new GameScreen(g));
 
                     dispose();
                     //game.setScreen(new CharacterSelectScreen(game));

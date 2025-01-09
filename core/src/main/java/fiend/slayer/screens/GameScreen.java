@@ -82,7 +82,7 @@ public class GameScreen implements Screen {
                 System.out.println(r.getName());
             }*/
             TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
-            System.out.println(m_ts);
+            //System.out.println(m_ts);
             TiledMapTile walls = m_ts.getTile(1);
 
 

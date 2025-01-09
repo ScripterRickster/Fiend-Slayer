@@ -3,10 +3,8 @@ package fiend.slayer.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,8 +23,7 @@ public class EndScreen implements Screen{
 
 
     SpriteBatch batch;
-    //public BitmapFont font;
-    public FiendSlayer game;
+    final FiendSlayer game;
     Button start_button;
     Button exit_button;
     Stage stage;
@@ -49,10 +46,9 @@ public class EndScreen implements Screen{
 
     float tsx,tsy;
 
-    public EndScreen(FiendSlayer g){
+    public EndScreen(final FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
-        //font = new BitmapFont();
         game = g;
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
@@ -97,17 +93,15 @@ public class EndScreen implements Screen{
                     b_click.play();
                     b_click.setLooping(false);
                     dispose();
+                    game.setScreen(new GameScreen(g));
 
-
-                    MainMenuScreen stest = new MainMenuScreen(game);
-                    System.out.println(stest.toString());
 
 
 
 
 
                     //game.setScreen(new MainMenuScreen(game));
-                    game.setScreen(stest);
+
 
                     //game.setScreen(new CharacterSelectScreen(game));
 
