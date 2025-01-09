@@ -1,13 +1,10 @@
 package fiend.slayer.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -24,7 +21,6 @@ import fiend.slayer.FiendSlayer;
 
 public class MainMenuScreen implements Screen {
     SpriteBatch batch;
-    //public BitmapFont font;
     final FiendSlayer game;
     Button start_button;
     Stage stage;
@@ -47,7 +43,6 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
-        //font = new BitmapFont();
         game = g;
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
@@ -149,6 +144,5 @@ public class MainMenuScreen implements Screen {
         start_hover.dispose();
         b_click.dispose();
         b_hover.dispose();
-        //font.dispose();
     }
 }
