@@ -262,6 +262,7 @@ public class GameScreen implements Screen {
                     chests.removeValue(ct, false);
                 }
                 loot.clear();
+                player.held_weapon.disposeSounds();
                 game.setScreen(new EndScreen(game));
                 dispose();
 
@@ -406,8 +407,10 @@ public class GameScreen implements Screen {
         tiledmap.dispose();
         tiledmap_renderer.dispose();
 
+        /*
         pickup_sfx.stop();
         pickup_sfx.dispose();
+        */
     }
 
     public Vector2 mousePos() {
