@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 
 import fiend.slayer.FiendSlayer;
 
@@ -92,8 +93,13 @@ public class EndScreen implements Screen{
                 try{
                     b_click.play();
                     b_click.setLooping(false);
-                    dispose();
-                    game.setScreen(new GameScreen(g));
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            game.setScreen(new GameScreen(game));
+                            dispose();
+                        }
+                    }, 2);
 
 
 
