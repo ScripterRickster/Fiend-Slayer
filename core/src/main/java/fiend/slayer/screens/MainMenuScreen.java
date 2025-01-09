@@ -69,6 +69,7 @@ public class MainMenuScreen implements Screen {
 
         start_button = new Button(buttonStyle);
         start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
+        start_button.setTransform(true);
         start_button.setScale(game.ui_scale_factor);
         start_button.addListener(new ClickListener() {
             @Override
