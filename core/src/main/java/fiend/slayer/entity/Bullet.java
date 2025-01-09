@@ -85,10 +85,10 @@ public class Bullet extends Entity {
     }
 
     public void disposeSounds(){
-        /*
+
         hit_fx.stop();
         hit_fx.dispose();
-        */
+
     }
 
     @Override

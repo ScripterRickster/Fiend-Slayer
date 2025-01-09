@@ -275,6 +275,7 @@ public class GameScreen implements Screen {
     }
 
     public void drawPlayerStats() {
+        if(player.hp <= 0){return;}
         s_render.setProjectionMatrix(batch.getProjectionMatrix().idt().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
 
@@ -339,6 +340,7 @@ public class GameScreen implements Screen {
     }
 
     public void draw() {
+        if(player.hp <= 0){return;}
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         viewport.getCamera().position.set(player.x, player.y, 0);
@@ -400,17 +402,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() { // this is not called automatically
-        batch.dispose();
+        batch.dispose(); // CRASHES
         cursor.dispose();
         font.dispose();
         s_render.dispose();
+        tiledmap_renderer.dispose(); // CRASHES
         tiledmap.dispose();
-        tiledmap_renderer.dispose();
 
-        /*
+
         pickup_sfx.stop();
         pickup_sfx.dispose();
-        */
+
     }
 
     public Vector2 mousePos() {

@@ -136,11 +136,10 @@ public class MainMenuScreen implements Screen {
         start_norm.dispose();
         start_hover.dispose();
 
-        /*
         b_click.stop();
         b_hover.stop();
         b_click.dispose();
         b_hover.dispose();
-        */
+
     }
 }
