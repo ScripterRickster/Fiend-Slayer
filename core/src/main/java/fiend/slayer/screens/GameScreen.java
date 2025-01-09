@@ -67,7 +67,6 @@ public class GameScreen implements Screen {
     MapLayer collideLayer;
     MapLayer mobSpawnLayer;
 
-    float osx,osy,scaleFactor;
     float font_size = 2.5f;
 
     Music pickup_sfx;
@@ -143,10 +142,6 @@ public class GameScreen implements Screen {
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
-
-        osx = Gdx.graphics.getWidth();
-        osy = Gdx.graphics.getHeight();
-        scaleFactor = 1f;
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
@@ -285,9 +280,9 @@ public class GameScreen implements Screen {
 
         s_render.begin(ShapeRenderer.ShapeType.Line);
 
-        float tmp_bar_height = 40f* Gdx.graphics.getWidth()/osx;
-        float tmp_bar_width = 400f* Gdx.graphics.getHeight()/osy;
-        float padding = 10f * Gdx.graphics.getHeight()/osy;
+        float tmp_bar_height = 40f* Gdx.graphics.getWidth()/game.osx;
+        float tmp_bar_width = 400f* Gdx.graphics.getHeight()/game.osy;
+        float padding = 10f * Gdx.graphics.getHeight()/game.osy;
 
         float barX = padding;
         float hp_barY = Gdx.graphics.getHeight() - tmp_bar_height - padding; // Y position from top
@@ -331,7 +326,7 @@ public class GameScreen implements Screen {
 
 
 
-        float fontPadding = 5 * scaleFactor;
+        float fontPadding = 5 * game.ui_scale_factor;
 
         batch.begin();
         font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
@@ -387,8 +382,8 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        scaleFactor = height/osy;
-        font.getData().setScale(font_size * scaleFactor);
+        game.ui_scale_factor = height/game.osy;
+        font.getData().setScale(font_size * game.ui_scale_factor);
     }
 
     @Override

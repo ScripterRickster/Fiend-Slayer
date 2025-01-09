@@ -24,7 +24,7 @@ import fiend.slayer.FiendSlayer;
 
 public class MainMenuScreen implements Screen {
     SpriteBatch batch;
-    public BitmapFont font;
+    //public BitmapFont font;
     public FiendSlayer game;
     Button start_button;
     Stage stage;
@@ -41,19 +41,21 @@ public class MainMenuScreen implements Screen {
 
     boolean mouse_on_button = false;
 
-    float sx,sy;
+    float tsx,tsy;
+
+
     public MainMenuScreen(FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        //font = new BitmapFont();
         game = g;
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
 
+        tsx = Gdx.graphics.getWidth(); tsy = Gdx.graphics.getHeight();
+
         b_click = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_click.mp3"));
         b_hover = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_hover.mp3"));
-
-        sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
 
         start_norm = new Texture("start_norm.png");
         start_hover = new Texture("start_hov.png");
@@ -66,7 +68,7 @@ public class MainMenuScreen implements Screen {
         buttonStyle.over = hoverDrawable;
 
         start_button = new Button(buttonStyle);
-        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
+        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f)
 
         start_button.addListener(new ClickListener() {
             @Override
@@ -74,10 +76,11 @@ public class MainMenuScreen implements Screen {
                 try{
                     b_click.play();
                     b_click.setLooping(false);
-                    dispose();
 
                     GameScreen gstest = new GameScreen(game);
                     game.setScreen(gstest);
+
+                    dispose();
                     //game.setScreen(new CharacterSelectScreen(game));
 
                 }catch(Exception e){
@@ -112,7 +115,7 @@ public class MainMenuScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
-        batch.draw(tr,0,0,sx,sy);
+        batch.draw(tr,0,0,tsx,tsy);
         batch.end();
         stage.act();
         stage.draw();
@@ -120,6 +123,8 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        game.ui_scale_factor = height/game.osy;
+        start_button.setScale(game.ui_scale_factor);
     }
 
     @Override
@@ -146,6 +151,6 @@ public class MainMenuScreen implements Screen {
         start_hover.dispose();
         b_click.dispose();
         b_hover.dispose();
-        font.dispose();
+        //font.dispose();
     }
 }

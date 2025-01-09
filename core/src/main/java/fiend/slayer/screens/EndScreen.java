@@ -25,7 +25,7 @@ public class EndScreen implements Screen{
 
 
     SpriteBatch batch;
-    public BitmapFont font;
+    //public BitmapFont font;
     public FiendSlayer game;
     Button start_button;
     Button exit_button;
@@ -47,20 +47,19 @@ public class EndScreen implements Screen{
     boolean mouse_on_sbutton = false;
     boolean mouse_on_ebutton = false;
 
-    float sx,sy;
+    float tsx,tsy;
 
     public EndScreen(FiendSlayer g){
         stage = new Stage();
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        //font = new BitmapFont();
         game = g;
         bg = new Texture("StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
+        tsx = Gdx.graphics.getWidth(); tsy = Gdx.graphics.getHeight();
 
         b_click = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_click.mp3"));
         b_hover = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_hover.mp3"));
-
-        sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
 
         start_norm = new Texture("restart_norm.png");
         start_hover = new Texture("restart_hov.png");
@@ -164,7 +163,7 @@ public class EndScreen implements Screen{
         ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
-        batch.draw(tr,0,0,sx,sy);
+        batch.draw(tr,0,0,tsx,tsy);
         batch.end();
         stage.act();
         stage.draw();
@@ -172,6 +171,9 @@ public class EndScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        game.ui_scale_factor = height/game.osy;
+        start_button.setScale(game.ui_scale_factor);
+        exit_button.setScale(game.ui_scale_factor);
     }
 
     @Override
@@ -193,11 +195,10 @@ public class EndScreen implements Screen{
     public void dispose() {
         stage.dispose();
         batch.dispose();
-        bg.dispose();
         start_norm.dispose();
         start_hover.dispose();
         b_click.dispose();
         b_hover.dispose();
-        font.dispose();
+        //font.dispose();
     }
 }
