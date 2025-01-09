@@ -69,6 +69,11 @@ public class MainMenuScreen implements Screen {
         start_button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                b_click.play();
+                b_click.setLooping(false);
+                game.setScreen(new GameScreen(g));
+                dispose();
+                /*
                 try{
                     b_click.play();
                     b_click.setLooping(false);
@@ -80,6 +85,7 @@ public class MainMenuScreen implements Screen {
                 }catch(Exception e){
                     System.out.println(e);
                 }
+                    */
             }
         });
 
@@ -144,8 +150,8 @@ public class MainMenuScreen implements Screen {
         start_hover.dispose();
 
         b_click.stop();
-        b_click.dispose();
         b_hover.stop();
+        b_click.dispose();
         b_hover.dispose();
     }
 }
