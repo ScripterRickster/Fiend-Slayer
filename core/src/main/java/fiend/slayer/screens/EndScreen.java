@@ -191,8 +191,8 @@ public class EndScreen implements Screen{
         start_hover.dispose();
 
         b_click.stop();
-        b_click.dispose();
         b_hover.stop();
+        b_click.dispose();
         b_hover.dispose();
     }
 }
