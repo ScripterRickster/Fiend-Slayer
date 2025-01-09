@@ -101,16 +101,6 @@ public class EndScreen implements Screen{
                         }
                     }, 2);
 
-
-
-
-
-
-                    //game.setScreen(new MainMenuScreen(game));
-
-
-                    //game.setScreen(new CharacterSelectScreen(game));
-
                 }catch(Exception e){
                     System.out.println(e);
                 }
