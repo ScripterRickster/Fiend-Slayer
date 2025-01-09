@@ -73,19 +73,6 @@ public class MainMenuScreen implements Screen {
                 b_click.setLooping(false);
                 game.setScreen(new GameScreen(g));
                 dispose();
-                /*
-                try{
-                    b_click.play();
-                    b_click.setLooping(false);
-                    game.setScreen(new GameScreen(g));
-
-                    dispose();
-                    //game.setScreen(new CharacterSelectScreen(game));
-
-                }catch(Exception e){
-                    System.out.println(e);
-                }
-                    */
             }
         });
 

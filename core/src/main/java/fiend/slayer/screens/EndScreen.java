@@ -93,13 +93,9 @@ public class EndScreen implements Screen{
                 try{
                     b_click.play();
                     b_click.setLooping(false);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new GameScreen(game));
-                            dispose();
-                        }
-                    }, 2);
+
+                    game.setScreen(new GameScreen(game));
+                    dispose();
 
                 }catch(Exception e){
                     System.out.println(e);
