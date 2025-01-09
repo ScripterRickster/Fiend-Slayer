@@ -68,7 +68,7 @@ public class MainMenuScreen implements Screen {
         buttonStyle.over = hoverDrawable;
 
         start_button = new Button(buttonStyle);
-        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f)
+        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
 
         start_button.addListener(new ClickListener() {
             @Override
