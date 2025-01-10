@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.Timer;
 
 import fiend.slayer.FiendSlayer;
 
@@ -86,7 +85,7 @@ public class EndScreen implements Screen{
 
         exit_button.setTransform(true);
         exit_button.setScale(game.ui_scale_x,game.ui_scale_y);
-        exit_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - start_button.getHeight() / 2f);
+        exit_button.setPosition(Gdx.graphics.getWidth() / (2f*game.ui_scale_x) - exit_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - exit_button.getHeight() / 2f);
 
         start_button.addListener(new ClickListener() {
             @Override
