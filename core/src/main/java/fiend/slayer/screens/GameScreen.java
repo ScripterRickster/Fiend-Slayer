@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
     MapLayer collideLayer;
     MapLayer mobSpawnLayer;
 
-    float font_size = 2f;
+    float font_size = 2.5f;
 
     Music pickup_sfx;
 
@@ -181,6 +181,23 @@ public class GameScreen implements Screen {
         chests.add(cst);
     }
 
+    public void end_game(){
+        for(Bullet bt: bullets){
+            bt.disposeSounds();
+            bullets.removeValue(bt, false);
+        }
+        mobs.clear();
+        exp_orbs.clear();
+        for(Chest ct: chests){
+            ct.disposeSounds();
+            chests.removeValue(ct, false);
+        }
+        loot.clear();
+        player.held_weapon.disposeSounds();
+        game.setScreen(new EndScreen(game));
+        dispose();
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
@@ -249,29 +266,13 @@ public class GameScreen implements Screen {
             }
         }
 
-        try{
-            if(player.hp <= 0){
-                for(Bullet bt: bullets){
-                    bt.disposeSounds();
-                    bullets.removeValue(bt, false);
-                }
-                mobs.clear();
-                exp_orbs.clear();
-                for(Chest ct: chests){
-                    ct.disposeSounds();
-                    chests.removeValue(ct, false);
-                }
-                loot.clear();
-                player.held_weapon.disposeSounds();
-                game.setScreen(new EndScreen(game));
-                dispose();
-
-            }
-        }catch(Exception e){
-            System.out.println(e);
+        if(player.hp <= 0){
+            end_game();
         }
 
-
+        if(mobs.size == 0){
+            end_game();
+        }
     }
 
     public void drawPlayerStats() {
