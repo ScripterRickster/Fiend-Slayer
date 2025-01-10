@@ -75,17 +75,18 @@ public class EndScreen implements Screen{
         start_buttonStyle.over = start_hoverDrawable;
 
         start_button = new Button(start_buttonStyle);
-        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
         start_button.setTransform(true);
         start_button.setScale(game.ui_scale_x,game.ui_scale_y);
+        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
 
         Button.ButtonStyle exit_buttonStyle = new Button.ButtonStyle();
         exit_buttonStyle.up = exit_normalDrawable;
         exit_buttonStyle.over = exit_hoverDrawable;
         exit_button = new Button(exit_buttonStyle);
-        exit_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - start_button.getHeight() / 2f);
+
         exit_button.setTransform(true);
         exit_button.setScale(game.ui_scale_x,game.ui_scale_y);
+        exit_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - start_button.getHeight() / 2f);
 
         start_button.addListener(new ClickListener() {
             @Override
