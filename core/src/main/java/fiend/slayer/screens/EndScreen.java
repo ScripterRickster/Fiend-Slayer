@@ -85,7 +85,7 @@ public class EndScreen implements Screen{
 
         exit_button.setTransform(true);
         exit_button.setScale(game.ui_scale_x,game.ui_scale_y);
-        exit_button.setPosition(Gdx.graphics.getWidth() / (2f*(2-game.ui_scale_x)) - exit_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - exit_button.getHeight() / 2f);
+        exit_button.setPosition(Gdx.graphics.getWidth() / 2f - exit_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - exit_button.getHeight() / 2f);
 
         start_button.addListener(new ClickListener() {
             @Override

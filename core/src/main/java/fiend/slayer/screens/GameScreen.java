@@ -205,6 +205,7 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
+        if(player.hp == 0){return;}
         player.update(delta);
 
         for(int i = mobs.size-1; i>=0; --i){
@@ -268,6 +269,7 @@ public class GameScreen implements Screen {
 
         if(player.hp <= 0){
             end_game();
+            return;
         }
 
         if(mobs.size == 0){
