@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
     MapLayer collideLayer;
     MapLayer mobSpawnLayer;
 
-    float font_size = 2.5f;
+    float font_size = 2f;
 
     Music pickup_sfx;
 
@@ -144,7 +144,7 @@ public class GameScreen implements Screen {
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
-        font.getData().setScale(font_size);
+        font.getData().setScale(font_size*game.ui_scale_x,font_size*game.ui_scale_y);
 
         int m_curr = 0, m_limit = 10;
 
@@ -327,12 +327,13 @@ public class GameScreen implements Screen {
 
 
 
-        float fontPadding = 5 * game.ui_scale_factor;
+        float fontPaddingX = 5 * game.ui_scale_x;
+        float fontPaddingY = 5 * game.ui_scale_y;
 
         batch.begin();
-        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
-        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPadding, armor_barY + tmp_bar_height - fontPadding);
-        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPadding, energy_barY + tmp_bar_height - fontPadding);
+        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPaddingX, hp_barY + tmp_bar_height - fontPaddingY);
+        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPaddingX, armor_barY + tmp_bar_height - fontPaddingY);
+        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPaddingX, energy_barY + tmp_bar_height - fontPaddingY);
         batch.end();
 
 
@@ -384,8 +385,8 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        game.ui_scale_factor = height/game.osy;
-        font.getData().setScale(font_size * game.ui_scale_factor);
+        game.update_ui_scale(width, height);
+        font.getData().setScale(font_size * game.ui_scale_x,font_size*game.ui_scale_y);
     }
 
     @Override
@@ -402,11 +403,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() { // this is not called automatically
-        batch.dispose(); // CRASHES
+        batch.dispose();
         cursor.dispose();
         font.dispose();
         s_render.dispose();
-        tiledmap_renderer.dispose(); // CRASHES
+        tiledmap_renderer.dispose();
         tiledmap.dispose();
 
 

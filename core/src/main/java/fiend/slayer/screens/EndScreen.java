@@ -77,7 +77,7 @@ public class EndScreen implements Screen{
         start_button = new Button(start_buttonStyle);
         start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
         start_button.setTransform(true);
-        start_button.setScale(game.ui_scale_factor);
+        start_button.setScale(game.ui_scale_x,game.ui_scale_y);
 
         Button.ButtonStyle exit_buttonStyle = new Button.ButtonStyle();
         exit_buttonStyle.up = exit_normalDrawable;
@@ -85,7 +85,7 @@ public class EndScreen implements Screen{
         exit_button = new Button(exit_buttonStyle);
         exit_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - start_button.getHeight() / 2f);
         exit_button.setTransform(true);
-        exit_button.setScale(game.ui_scale_factor);
+        exit_button.setScale(game.ui_scale_x,game.ui_scale_y);
 
         start_button.addListener(new ClickListener() {
             @Override
@@ -161,7 +161,7 @@ public class EndScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
-        game.ui_scale_factor = height/game.osy;
+        game.update_ui_scale(width, height);
     }
 
     @Override

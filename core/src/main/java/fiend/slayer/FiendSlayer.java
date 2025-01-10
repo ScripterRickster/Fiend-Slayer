@@ -7,7 +7,8 @@ import com.badlogic.gdx.Gdx;
 import fiend.slayer.screens.MainMenuScreen;
 
 public class FiendSlayer extends Game {
-    public float ui_scale_factor = 1;
+    public float ui_scale_x = 1;
+    public float ui_scale_y = 1;
     public float osx,osy;
     @Override
     public void create() {
@@ -15,6 +16,11 @@ public class FiendSlayer extends Game {
         this.setScreen(new MainMenuScreen(this));
         osx = Gdx.graphics.getWidth();
         osy = Gdx.graphics.getHeight();
+    }
+
+    public void update_ui_scale(float width, float height){
+        ui_scale_x = width/osx;
+        ui_scale_y = height/osy;
     }
 
     @Override
