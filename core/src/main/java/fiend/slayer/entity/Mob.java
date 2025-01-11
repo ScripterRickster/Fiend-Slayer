@@ -17,19 +17,13 @@ import com.badlogic.gdx.utils.Json;
 import fiend.slayer.loot.EXP_Orb;
 import fiend.slayer.screens.GameScreen;
 import fiend.slayer.weapons.HeldWeapon;
-import fiend.slayer.weapons.WeaponData;
 
 public class Mob extends Entity {
-
-    private boolean sees_player = false;
 
     private HeldWeapon held_weapon;
     private MobData mdata;
 
     private Random rng;
-
-
-
     public Mob(final GameScreen gs, float tx, float ty,String type){
         super(gs);
 
@@ -44,7 +38,6 @@ public class Mob extends Entity {
 
         sprite = new Sprite(new Texture("entity/mobs/img/"+mdata.image+".png"));
         autoSpriteSize();
-        scaleSpriteSize(mdata.img_scale);
 
         x = tx; y = ty;
 
@@ -56,7 +49,7 @@ public class Mob extends Entity {
     public void update(float delta) {
 
         Vector2 playerPosition = new Vector2(gs.player.center().x, gs.player.center().y);
-        sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
+        boolean sees_player = checkLineOfSight(new Vector2(x, y), playerPosition);
 
         held_weapon.update(delta);
         if (sees_player) {
@@ -72,7 +65,7 @@ public class Mob extends Entity {
     }
 
     private boolean checkLineOfSight(Vector2 start, Vector2 end) {
-        MapLayer collision_layer = gs.tiledmap.getLayers().get("collisions");
+        MapLayer collision_layer = gs.getTiledMap().getLayers().get("collisions");
 
         if (collision_layer == null) {
             return false;

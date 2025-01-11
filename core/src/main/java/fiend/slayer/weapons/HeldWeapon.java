@@ -1,27 +1,28 @@
 package fiend.slayer.weapons;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Json;
+
 import fiend.slayer.entity.BulletBuilder;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Player;
 import fiend.slayer.screens.GameScreen;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Random;
 
 public class HeldWeapon {
 
     private final GameScreen gs;
 
     private Sprite sprite;
-    private Entity holder;
+    private final Entity holder;
     private WeaponData wdata = new WeaponData();
-    private String weapon_id = null;
+    public String weapon_id = null;
 
     public HeldWeapon(final GameScreen gs, final Entity holder) {
         this.gs = gs;
@@ -77,7 +78,6 @@ public class HeldWeapon {
     public void fire(float angle) {
         if (weapon_id == null) return;
 
-        Random rand = new Random();
 
         if (time_since_last_fire < wdata.fire_rate) return;
         if(holder instanceof Player){
@@ -88,8 +88,9 @@ public class HeldWeapon {
 
         time_since_last_fire = 0;
 
+        Random rand = new Random();
         for (int i = 0; i < wdata.bullet_count; ++i) {
-            gs.bullets.add(new BulletBuilder(gs, holder)
+            gs.getBullets().add(new BulletBuilder(gs, holder)
                     .heading(angle + wdata.precision * rand.nextFloat(-1, 1))
                     .muzzleBoost(wdata.muzzle_boost)
                     .speed(25f * rand.nextFloat(1 - wdata.speed_range, 1 + wdata.speed_range))

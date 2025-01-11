@@ -7,43 +7,42 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
+import com.badlogic.gdx.utils.ScreenUtils;
 import fiend.slayer.FiendSlayer;
 
 public class MainMenuScreen implements Screen {
-    SpriteBatch batch;
+
     public BitmapFont font;
     public FiendSlayer game;
+    SpriteBatch batch;
     Button start_button;
     Stage stage;
-
     Texture bg; // bg = background
     TextureRegion tr; // for bg
-
-
     Texture start_norm;
     Texture start_hover;
 
-    float sx,sy;
-    public MainMenuScreen(FiendSlayer g){
+    float sx, sy;
+
+    public MainMenuScreen(FiendSlayer g) {
         stage = new Stage();
         batch = new SpriteBatch();
         font = new BitmapFont();
         game = g;
-        bg = new Texture("StartMenuBackground.jpg");
+        bg = new Texture("ui/StartMenuBackground.jpg");
         tr = new TextureRegion(bg);
 
-        sx = Gdx.graphics.getWidth(); sy = Gdx.graphics.getHeight();
+        sx = Gdx.graphics.getWidth();
+        sy = Gdx.graphics.getHeight();
 
-        start_norm = new Texture("start_norm.png");
-        start_hover = new Texture("start_hov.png");
+        start_norm = new Texture("ui/start_norm.png");
+        start_hover = new Texture("ui/start_hov.png");
 
         Drawable normalDrawable = new TextureRegionDrawable(start_norm);
         Drawable hoverDrawable = new TextureRegionDrawable(start_hover);
@@ -77,11 +76,12 @@ public class MainMenuScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
-        batch.draw(tr,0,0,sx,sy);
+        batch.draw(tr, 0, 0, sx, sy);
         batch.end();
         stage.act();
         stage.draw();
     }
+
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);

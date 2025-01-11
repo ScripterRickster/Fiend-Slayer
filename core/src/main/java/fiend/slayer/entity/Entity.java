@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
 import fiend.slayer.screens.GameScreen;
 
 public abstract class Entity {
@@ -44,8 +45,12 @@ public abstract class Entity {
         return this.getRectangle().overlaps(e.getRectangle());
     }
 
-    public float getHeading(Entity e) { return (float) (MathUtils.atan2(e.center().y - center().y, e.center().x - center().x)); }
+    public float getHeading(Entity e) { return (float) (MathUtils.atan2(e.center().y-center().y, e.center().x-center().x)); }
 
     public Vector2 center() { return new Vector2(x + sprite.getWidth()/2, y + sprite.getHeight()/2); }
+
+    public boolean isAlive() {
+        return !dead;
+    }
 
 }
