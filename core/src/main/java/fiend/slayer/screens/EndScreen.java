@@ -197,6 +197,7 @@ public class EndScreen implements Screen{
         batch.dispose();
         start_norm.dispose();
         start_hover.dispose();
+        bg.dispose();
 
 
         b_click.stop();
