@@ -1,6 +1,7 @@
 package fiend.slayer.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
@@ -26,6 +27,11 @@ import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
 import fiend.slayer.level.LevelGenerator;
+import fiend.slayer.loot.Chest;
+import fiend.slayer.loot.EXP_Orb;
+import fiend.slayer.loot.Loot;
+
+import java.util.Random;
 
 public class GameScreen implements Screen {
 
@@ -43,6 +49,18 @@ public class GameScreen implements Screen {
     public Player player;
     public Array<Mob> mobs = new Array<>();
     public float tile_size;
+    public Array<Loot> loot = new Array<>();
+    public Array<Chest> chests = new Array<>();
+    public Array<EXP_Orb> exp_orbs = new Array<>();
+
+    public Cursor cursor;
+
+    MapLayer drawingLayer;
+    MapLayer collideLayer;
+    MapLayer mobSpawnLayer;
+
+    float osx,osy,scaleFactor;
+    float font_size = 2.5f;
 
     public GameScreen(final FiendSlayer g) {
         game = g;
@@ -59,6 +77,8 @@ public class GameScreen implements Screen {
         collideLayer = maplayers.get("collisions");
 
         player = new Player(this);
+
+
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
@@ -97,10 +117,14 @@ public class GameScreen implements Screen {
 
         // crosshair stuff
         Pixmap pixmap = new Pixmap(Gdx.files.internal("gui/crosshair.png"));
-        int xHotspot = (pixmap.getWidth() + 1) / 2, yHotspot = (pixmap.getHeight() + 1) / 2;
+
+        int xHotspot = (pixmap.getWidth() + 1 )/2, yHotspot = (pixmap.getHeight() + 1)/2;
         cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
         pixmap.dispose();
         Gdx.graphics.setCursor(cursor);
+
+        Chest cst = new Chest(this,5,5,player);
+        chests.add(cst);
     }
 
     @Override
@@ -127,6 +151,86 @@ public class GameScreen implements Screen {
                 bullets.removeIndex(i);
             }
         }
+      
+        if(player.hp <= 0){
+            bullets.clear();
+            mobs.clear();
+            game.setScreen(new EndScreen(game));
+            dispose();
+        }
+
+        for (Chest c: chests) {
+            c.update(delta);
+
+            if (c.getAlpha() <=0) {
+                chests.removeValue(c,false);
+            }
+        }
+
+        for (EXP_Orb exp: exp_orbs) {
+            exp.update(delta);
+        }
+
+        if(Gdx.input.isButtonJustPressed(Buttons.RIGHT)){
+            float c_dist = Float.MAX_VALUE;
+            Loot c_loot = null;
+            for(Loot l: loot){
+                float l_dst = l.distanceToEntity(player);
+                if(l_dst < c_dist && l_dst <= player.pickup_range / tile_size ){
+                    c_loot = l;
+                    c_dist = l_dst;
+                }
+            }
+
+            if(c_loot != null){
+                if(c_loot.r_class == "weapon"){
+                    loot.add(new Loot(this,player.x,player.y,"weapon",player.getCurrentWeapon()));
+                    player.changeWeapon(c_loot.r_type);
+                }else if(c_loot.r_class == "potion"){
+                    if(c_loot.r_type == "hp_potion"){
+                        player.hp = Math.min(player.hp+2,player.maxHP);
+                    }else if(c_loot.r_type == "energy_potion"){
+                        player.energy = Math.min(player.energy+50,player.maxEnergy);
+                    }
+                }
+                loot.removeValue(c_loot,false);
+            }
+        }
+    }
+
+    public void drawPlayerStats() {
+        s_render.setProjectionMatrix(batch.getProjectionMatrix().idt().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+
+        s_render.begin(ShapeRenderer.ShapeType.Line);
+
+        float tmp_bar_height = 40f* Gdx.graphics.getWidth()/osx;
+        float tmp_bar_width = 400f* Gdx.graphics.getHeight()/osy;
+        float padding = 10f * Gdx.graphics.getHeight()/osy;
+
+        float barX = padding;
+        float hp_barY = Gdx.graphics.getHeight() - tmp_bar_height - padding; // Y position from top
+        float armor_barY = hp_barY - tmp_bar_height - padding;
+        float energy_barY = armor_barY - tmp_bar_height - padding;
+
+
+        s_render.setColor(new Color(236 / 255f, 236 / 255f, 236 / 255f, 1f));
+        s_render.rect(barX, hp_barY, tmp_bar_width, tmp_bar_height);
+
+        s_render.rect(barX,armor_barY,tmp_bar_width,tmp_bar_height);
+
+        s_render.rect(barX,energy_barY,tmp_bar_width,tmp_bar_height);
+
+
+        s_render.end();
+        s_render.begin(ShapeRenderer.ShapeType.Filled);
+
+        if(player.hp > 0){
+            float hpPercentage = (float)player.hp / (float)player.maxHP;
+            float hpBarWidth = tmp_bar_width * hpPercentage;
+            s_render.setColor(1,0,0,1);
+            s_render.rect(barX+1, hp_barY+1, hpBarWidth-1, tmp_bar_height-1);
+        }
 
         if (!player.isAlive()) {
             bullets.clear();
@@ -134,6 +238,22 @@ public class GameScreen implements Screen {
             game.setScreen(new EndScreen(game));
             dispose();
         }
+
+        s_render.end();
+
+
+
+        float fontPadding = 5 * scaleFactor;
+
+        batch.begin();
+        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
+        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPadding, armor_barY + tmp_bar_height - fontPadding);
+        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPadding, energy_barY + tmp_bar_height - fontPadding);
+        batch.end();
+
+
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+
     }
 
     public void draw() {
@@ -154,13 +274,24 @@ public class GameScreen implements Screen {
 
         for (Bullet b : bullets) {
             b.draw(batch);
+          
+        for (Chest c: chests) {
+            c.draw(batch);
+        }
+
+        for (Loot l: loot) {
+            l.draw(batch);
+        }
+
+        for (EXP_Orb exp: exp_orbs) {
+            exp.draw(batch);
         }
 
         player.draw(batch);
 
-        batch.end(); //
+        batch.end();
 
-        player.drawStats(batch); // uses its own batches
+        drawPlayerStats();
 
     }
 

@@ -54,14 +54,16 @@ public class Player extends Entity {
         Timer.schedule(regenArmor, 0f, 15f);
 
         held_weapon = new HeldWeapon(gs, this);
-        held_weapon.setWeapon("shotgun");
+      
+        held_weapon.setWeapon("ak-47");
+    }
 
-        ui_scale_factor = 1f;
+    public String getCurrentWeapon(){return held_weapon.getCurrentWeapon();}
 
-        font = new BitmapFont();
-        font.setColor(Color.WHITE);
-        font.getData().setScale(font_size);
-
+    public void changeWeapon(String wpn){
+        if(wpn != null){
+            held_weapon.setWeapon(wpn);
+        }
     }
 
     @Override

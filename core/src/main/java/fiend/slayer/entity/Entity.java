@@ -15,6 +15,7 @@ public abstract class Entity {
 
     public boolean dead = false;
     public float x, y;
+    public float alpha = 1;
 
     public Entity(final GameScreen gs) {
         this.gs = gs;
@@ -32,9 +33,14 @@ public abstract class Entity {
 
     public void autoSpriteSize() { sprite.setSize(sprite.getWidth() / gs.tile_size, sprite.getHeight() / gs.tile_size); }
     public void scaleSpriteSize(float scale) {sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale); }
+    public void setAlpha(float a) { alpha = a; sprite.setAlpha(alpha);}
+    public float getAlpha() { return alpha;}
 
     public Rectangle getRectangle(){ return new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()); }
 
+    public float distanceToEntity(Entity e){
+        return Math.abs(new Vector2(this.x,this.y).dst(new Vector2(e.x,e.y)));
+    }
     public boolean collisionCheck(Entity e){
         return this.getRectangle().overlaps(e.getRectangle());
     }

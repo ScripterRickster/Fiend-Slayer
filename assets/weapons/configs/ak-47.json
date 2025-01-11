@@ -3,6 +3,7 @@
   "fire_rate": 0.15,
   "muzzle_boost": 25,
   "bullet_count": 1,
+  "energy_consumption": 2,
   "origin": {
     "x": 0,
     "y": 6

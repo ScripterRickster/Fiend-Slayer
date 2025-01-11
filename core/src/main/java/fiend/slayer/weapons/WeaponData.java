@@ -11,6 +11,7 @@ public class WeaponData {
         muzzle_boost = 0,
         bullet_count = 0,
         precision = 0,
+        energy_consumption = 0,
         speed_range = 0.05f
     ;
 

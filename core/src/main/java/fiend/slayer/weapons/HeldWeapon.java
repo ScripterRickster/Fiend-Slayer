@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Json;
 
 import fiend.slayer.entity.BulletBuilder;
 import fiend.slayer.entity.Entity;
+import fiend.slayer.entity.Player;
 import fiend.slayer.screens.GameScreen;
 
 public class HeldWeapon {
@@ -43,6 +44,8 @@ public class HeldWeapon {
 
         wdata.scale(gs.tile_size);
     }
+
+    public String getCurrentWeapon(){return weapon_id;}
 
     private float time_since_last_fire = 0;
 
@@ -77,6 +80,12 @@ public class HeldWeapon {
 
 
         if (time_since_last_fire < wdata.fire_rate) return;
+        if(holder instanceof Player){
+            Player plr = (Player) holder;
+            if (plr.energy - wdata.energy_consumption < 0) return;
+            plr.energy = Math.max(0,plr.energy - wdata.energy_consumption);
+        }
+
         time_since_last_fire = 0;
 
         Random rand = new Random();

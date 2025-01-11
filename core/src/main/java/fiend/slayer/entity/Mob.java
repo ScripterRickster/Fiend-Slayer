@@ -2,6 +2,7 @@ package fiend.slayer.entity;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 
+import fiend.slayer.loot.EXP_Orb;
 import fiend.slayer.screens.GameScreen;
 import fiend.slayer.weapons.HeldWeapon;
 
@@ -21,6 +23,8 @@ public class Mob extends Entity {
     private HeldWeapon held_weapon;
     private MobData mdata;
 
+    private Random rng;
+  
     public Mob(final GameScreen gs, float tx, float ty,String type){
         super(gs);
 
@@ -30,6 +34,8 @@ public class Mob extends Entity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        rng = new Random();
 
         sprite = new Sprite(new Texture("entity/mobs/img/"+mdata.image+".png"));
         autoSpriteSize();
@@ -77,10 +83,21 @@ public class Mob extends Entity {
         return true;
     }
 
+    public void spawn_exp_orb(){
+        float xpos = x + rng.nextFloat() * sprite.getX() / gs.tile_size;
+        float ypos = y + rng.nextFloat() * sprite.getY() / gs.tile_size;
+
+        gs.exp_orbs.add(new EXP_Orb(gs,xpos,ypos,1));
+
+    }
+
     public void damage(float dmg) {
         mdata.health = Math.max(0, mdata.health - dmg);
         if (mdata.health <= 0) {
             dead = true;
+            for(int i=0;i<mdata.exp_val;i++){
+                spawn_exp_orb();
+            }
         }
     }
 
