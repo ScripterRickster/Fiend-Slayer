@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+
 import fiend.slayer.screens.GameScreen;
 
 public class Bullet extends Entity {
@@ -76,10 +77,6 @@ public class Bullet extends Entity {
                     }
                 }
             }
-        }
-
-        if ((x < 0 || x > 800 * (1/gs.tile_size)) || (y < 0 || y > 600 * (1/gs.tile_size))){
-            dead = true;
         }
 
     }
