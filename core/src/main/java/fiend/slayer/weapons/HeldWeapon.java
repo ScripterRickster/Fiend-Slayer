@@ -1,17 +1,18 @@
 package fiend.slayer.weapons;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Json;
+
 import fiend.slayer.entity.BulletBuilder;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.screens.GameScreen;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Random;
 
 public class HeldWeapon {
 
@@ -80,7 +81,7 @@ public class HeldWeapon {
 
         Random rand = new Random();
         for (int i = 0; i < wdata.bullet_count; ++i) {
-            gs.bullets.add(new BulletBuilder(gs, holder)
+            gs.getBullets().add(new BulletBuilder(gs, holder)
                     .heading(angle + wdata.precision * rand.nextFloat(-1, 1))
                     .muzzleBoost(wdata.muzzle_boost)
                     .speed(25f * rand.nextFloat(1 - wdata.speed_range, 1 + wdata.speed_range))

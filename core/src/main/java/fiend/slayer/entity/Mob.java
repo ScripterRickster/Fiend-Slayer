@@ -1,5 +1,8 @@
 package fiend.slayer.entity;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,11 +12,9 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
+
 import fiend.slayer.screens.GameScreen;
 import fiend.slayer.weapons.HeldWeapon;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class Mob extends Entity {
 
@@ -59,7 +60,7 @@ public class Mob extends Entity {
     }
 
     private boolean checkLineOfSight(Vector2 start, Vector2 end) {
-        MapLayer collision_layer = gs.tiledmap.getLayers().get("collisions");
+        MapLayer collision_layer = gs.getTiledMap().getLayers().get("collisions");
 
         if (collision_layer == null) {
             return false;

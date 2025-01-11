@@ -12,22 +12,23 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+
 import fiend.slayer.screens.GameScreen;
 import fiend.slayer.weapons.HeldWeapon;
 
 public class Player extends Entity {
 
-    public float maxHP = 10;
-    public float maxArmor = 10;
-    public float maxEnergy = 10;
-    public float hp = maxHP;
-    public float armor = maxArmor;
-    public float energy = maxEnergy;
-    public boolean dead = false;
-    public HeldWeapon held_weapon;
-    float ui_scale_factor;
-    float font_size = 2.5f;
-    BitmapFont font;
+    private float maxHP = 10;
+    private float maxArmor = 10;
+    private float maxEnergy = 10;
+    private float hp = maxHP;
+    private float armor = maxArmor;
+    private float energy = maxEnergy;
+    private boolean dead = false;
+    private HeldWeapon held_weapon;
+    private float ui_scale_factor;
+    private float font_size = 2.5f;
+    private BitmapFont font;
     private float speed = 8f;
     private Task regenArmor;
     private ShapeRenderer shape_renderer = new ShapeRenderer();
@@ -169,6 +170,8 @@ public class Player extends Entity {
         font.draw(batch, "ARMOR: " + (int) armor + " / " + (int) maxArmor, padding + fontPadding, armor_barY + tmp_bar_height - fontPadding);
         font.draw(batch, "ENERGY: " + (int) energy + " / " + (int) maxEnergy, padding + fontPadding, energy_barY + tmp_bar_height - fontPadding);
 
+        font.draw(batch, "pos: " + x + " " + y, 50, 50);
+
         batch.end(); //
     }
 
@@ -176,5 +179,7 @@ public class Player extends Entity {
     public String toString() {
         return "Player Info | CORDS -> X: " + x + " , Y: " + y + " ; Stats -> HP: " + hp + " -> Armor: " + armor + " -> Energy Remaining: " + energy;
     }
+
+    public void setPos(float x, float y) { this.x = x; this.y = y; }
 
 }
