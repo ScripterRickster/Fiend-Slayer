@@ -19,8 +19,13 @@ public class FiendSlayer extends Game {
     }
 
     public void update_ui_scale(float width, float height){
+        /*
         ui_scale_x = width/osx;
         ui_scale_y = height/osy;
+        */
+        float uniform_scale = Math.min(width/osx, height/osy);
+        ui_scale_x = uniform_scale;
+        ui_scale_y = uniform_scale;
     }
 
     @Override

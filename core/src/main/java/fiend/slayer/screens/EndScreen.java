@@ -57,6 +57,11 @@ public class EndScreen implements Screen{
         b_click = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_click.mp3"));
         b_hover = Gdx.audio.newMusic(Gdx.files.internal("gui/sounds/b_hover.mp3"));
 
+        setupButtons();
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    public void setupButtons(){
         start_norm = new Texture("restart_norm.png");
         start_hover = new Texture("restart_hov.png");
 
@@ -76,7 +81,10 @@ public class EndScreen implements Screen{
         start_button = new Button(start_buttonStyle);
         start_button.setTransform(true);
         start_button.setScale(game.ui_scale_x,game.ui_scale_y);
-        start_button.setPosition(Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f, Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f);
+        start_button.setPosition(
+            Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f
+        );
 
         Button.ButtonStyle exit_buttonStyle = new Button.ButtonStyle();
         exit_buttonStyle.up = exit_normalDrawable;
@@ -85,7 +93,10 @@ public class EndScreen implements Screen{
 
         exit_button.setTransform(true);
         exit_button.setScale(game.ui_scale_x,game.ui_scale_y);
-        exit_button.setPosition(Gdx.graphics.getWidth() / 2f - exit_button.getWidth() / 2f, Gdx.graphics.getHeight() / 4f - exit_button.getHeight() / 2f);
+        exit_button.setPosition(
+            Gdx.graphics.getWidth() / 2f - exit_button.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 4f - exit_button.getHeight() / 2f
+        );
 
         start_button.addListener(new ClickListener() {
             @Override
@@ -140,7 +151,6 @@ public class EndScreen implements Screen{
 
         stage.addActor(start_button);
         stage.addActor(exit_button);
-        Gdx.input.setInputProcessor(stage);
     }
 
 
@@ -158,10 +168,12 @@ public class EndScreen implements Screen{
         stage.act();
         stage.draw();
     }
+
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        stage.getViewport().update(width,height,true);
         game.update_ui_scale(width, height);
+
     }
 
     @Override
