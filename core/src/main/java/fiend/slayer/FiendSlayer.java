@@ -1,6 +1,7 @@
 package fiend.slayer;
 
 import com.badlogic.gdx.Game;
+
 import fiend.slayer.screens.MainMenuScreen;
 
 public class FiendSlayer extends Game {

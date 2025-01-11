@@ -14,10 +14,6 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,16 +21,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Bullet;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
+import fiend.slayer.level.LevelGenerator;
 import fiend.slayer.loot.Chest;
 import fiend.slayer.loot.EXP_Orb;
 import fiend.slayer.loot.Loot;
-
-import java.util.Random;
 
 
 public class GameScreen implements Screen {
@@ -72,66 +68,17 @@ public class GameScreen implements Screen {
         game = g;
     }
 
-    public void createNewMap(){
-        if (tiledmap != null) {
-            /*for(TiledMapTileSet r: tiledmap.getTileSets()){
-                System.out.println(r.getName());
-            }*/
-            TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
-            System.out.println(m_ts);
-            TiledMapTile walls = m_ts.getTile(1);
-
-
-            TiledMapTileLayer d_layer = (TiledMapTileLayer) drawingLayer;
-
-
-
-
-            int boxSize = 25;
-            int offsetX = -boxSize / 2;
-            int offsetY = -boxSize / 2;
-
-            for(int i=0;i<offsetX+boxSize-1;i++){
-                for(int j=0; j<offsetY + boxSize-1;j++){
-                    RectangleMapObject m_block = new RectangleMapObject();
-                    m_block.getRectangle().set(i*tile_size,j*tile_size,tile_size,tile_size);
-                    mobSpawnLayer.getObjects().add(m_block);
-                }
-            }
-
-            for (int i = offsetX; i < offsetX + boxSize; i++) {
-                for (int j = offsetY; j < offsetY + boxSize; j++) {
-
-
-                    if (i == offsetX || i == offsetX + boxSize - 1 || j == offsetY || j == offsetY + boxSize - 1) {
-                        TiledMapTileLayer.Cell nCell = new TiledMapTileLayer.Cell();
-                        nCell.setTile(walls);
-                        d_layer.setCell(i, j, nCell);
-
-                        RectangleMapObject c_block = new RectangleMapObject();
-                        c_block.getRectangle().set(i*tile_size, j*tile_size, tile_size,tile_size);
-                        collideLayer.getObjects().add(c_block);
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public void show() {
         s_render = new ShapeRenderer();
         batch = new SpriteBatch();
-        tiledmap = new TmxMapLoader().load("blank_map.tmx");
+        tiledmap = new LevelGenerator().generateLevel();
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
         collideLayer = tiledmap.getLayers().get("collisions");
         drawingLayer = tiledmap.getLayers().get("main");
-        mobSpawnLayer = tiledmap.getLayers().get("mob_spawning_locations");
-
-        createNewMap();
+        mobSpawnLayer = tiledmap.getLayers().get("mob_spawn");
 
         player = new Player(this);
-
-
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
@@ -145,6 +92,8 @@ public class GameScreen implements Screen {
         font.getData().setScale(font_size);
 
         int m_curr = 0, m_limit = 10;
+
+        MapLayer player_spawn_layer = tiledmap.getLayers().get("player_spawn");
 
         if (tiledmap != null) {
             MapObjects mob_spawn_locs = mobSpawnLayer.getObjects();
@@ -165,6 +114,11 @@ public class GameScreen implements Screen {
                     break;
                 }
 
+                if (player_spawn_layer != null) {
+                    RectangleMapObject loc = (RectangleMapObject) player_spawn_layer.getObjects().get(0);
+                    player.x = loc.getRectangle().x;
+                    player.y = loc.getRectangle().y;
+                }
             }
         }
 
@@ -190,7 +144,7 @@ public class GameScreen implements Screen {
 
         for(int i = mobs.size-1; i>=0; --i){
             Mob m = mobs.get(i);
-            if (new Random().nextInt(100) <= 5) m.update(delta);
+            m.update(delta);
             if(m.dead){
                 mobs.removeIndex(i);
             }
