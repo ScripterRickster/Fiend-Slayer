@@ -1,5 +1,7 @@
 package fiend.slayer.weapons;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +25,8 @@ public class HeldWeapon {
     private WeaponData wdata = new WeaponData();
     private String weapon_id = null;
 
+    Music sfx;
+
     public HeldWeapon(final GameScreen gs, final Entity holder) {
         this.gs = gs;
         this.holder = holder;
@@ -37,6 +41,7 @@ public class HeldWeapon {
         Json json = new Json();
         try {
             wdata = json.fromJson(WeaponData.class, Files.readString(Path.of("weapons/configs/" + weapon_id + ".json")));
+            sfx = Gdx.audio.newMusic(Gdx.files.internal("weapons/sounds/"+weapon_id+".mp3"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -45,6 +50,7 @@ public class HeldWeapon {
     }
 
     public String getCurrentWeapon(){return weapon_id;}
+    public WeaponData getCurrentWeaponData(){return wdata;}
 
     private float time_since_last_fire = 0;
 
@@ -86,6 +92,9 @@ public class HeldWeapon {
             plr.energy = Math.max(0,plr.energy - wdata.energy_consumption);
         }
 
+        sfx.play();
+        sfx.setLooping(false);
+
         time_since_last_fire = 0;
 
         for (int i = 0; i < wdata.bullet_count; ++i) {
@@ -97,5 +106,12 @@ public class HeldWeapon {
                 .buildBullet()
             );
         }
+    }
+
+    public void disposeSounds(){
+
+        sfx.stop();
+        sfx.dispose();
+
     }
 }

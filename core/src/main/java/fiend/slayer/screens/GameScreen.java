@@ -3,6 +3,7 @@ package fiend.slayer.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,16 +25,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
 import fiend.slayer.FiendSlayer;
 import fiend.slayer.entity.Bullet;
 import fiend.slayer.entity.Entity;
 import fiend.slayer.entity.Mob;
 import fiend.slayer.entity.Player;
+import fiend.slayer.level.LevelGenerator;
 import fiend.slayer.loot.Chest;
 import fiend.slayer.loot.EXP_Orb;
 import fiend.slayer.loot.Loot;
-
-import java.util.Random;
 
 
 public class GameScreen implements Screen {
@@ -65,86 +65,39 @@ public class GameScreen implements Screen {
     MapLayer collideLayer;
     MapLayer mobSpawnLayer;
 
-    float osx,osy,scaleFactor;
     float font_size = 2.5f;
+
+    Music pickup_sfx;
+
 
     public GameScreen(final FiendSlayer g) {
         game = g;
-    }
-
-    public void createNewMap(){
-        if (tiledmap != null) {
-            /*for(TiledMapTileSet r: tiledmap.getTileSets()){
-                System.out.println(r.getName());
-            }*/
-            TiledMapTileSet m_ts = tiledmap.getTileSets().getTileSet("tileset1");
-            System.out.println(m_ts);
-            TiledMapTile walls = m_ts.getTile(1);
-
-
-            TiledMapTileLayer d_layer = (TiledMapTileLayer) drawingLayer;
-
-
-
-
-            int boxSize = 25;
-            int offsetX = -boxSize / 2;
-            int offsetY = -boxSize / 2;
-
-            for(int i=0;i<offsetX+boxSize-1;i++){
-                for(int j=0; j<offsetY + boxSize-1;j++){
-                    RectangleMapObject m_block = new RectangleMapObject();
-                    m_block.getRectangle().set(i*tile_size,j*tile_size,tile_size,tile_size);
-                    mobSpawnLayer.getObjects().add(m_block);
-                }
-            }
-
-            for (int i = offsetX; i < offsetX + boxSize; i++) {
-                for (int j = offsetY; j < offsetY + boxSize; j++) {
-
-
-                    if (i == offsetX || i == offsetX + boxSize - 1 || j == offsetY || j == offsetY + boxSize - 1) {
-                        TiledMapTileLayer.Cell nCell = new TiledMapTileLayer.Cell();
-                        nCell.setTile(walls);
-                        d_layer.setCell(i, j, nCell);
-
-                        RectangleMapObject c_block = new RectangleMapObject();
-                        c_block.getRectangle().set(i*tile_size, j*tile_size, tile_size,tile_size);
-                        collideLayer.getObjects().add(c_block);
-                    }
-                }
-            }
-        }
     }
 
     @Override
     public void show() {
         s_render = new ShapeRenderer();
         batch = new SpriteBatch();
-        tiledmap = new TmxMapLoader().load("blank_map.tmx");
+        tiledmap = new LevelGenerator().generateLevel();
         tile_size = tiledmap.getProperties().get("tilewidth", Integer.class);
         collideLayer = tiledmap.getLayers().get("collisions");
         drawingLayer = tiledmap.getLayers().get("main");
-        mobSpawnLayer = tiledmap.getLayers().get("mob_spawning_locations");
-
-        createNewMap();
+        mobSpawnLayer = tiledmap.getLayers().get("mob_spawn");
 
         player = new Player(this);
 
-
+        pickup_sfx = Gdx.audio.newMusic(Gdx.files.internal("loot/sounds/pickup_item.mp3"));
 
         tiledmap_renderer = new OrthogonalTiledMapRenderer(tiledmap, 1 / tile_size);
         viewport = new ExtendViewport(16, 16);
 
-        osx = Gdx.graphics.getWidth();
-        osy = Gdx.graphics.getHeight();
-        scaleFactor = 1f;
-
         font = new BitmapFont();
         font.setColor(Color.WHITE);
-        font.getData().setScale(font_size);
+        font.getData().setScale(font_size*game.ui_scale_x,font_size*game.ui_scale_y);
 
         int m_curr = 0, m_limit = 10;
+
+        MapLayer player_spawn_layer = tiledmap.getLayers().get("player_spawn");
 
         if (tiledmap != null) {
             MapObjects mob_spawn_locs = mobSpawnLayer.getObjects();
@@ -165,6 +118,11 @@ public class GameScreen implements Screen {
                     break;
                 }
 
+                if (player_spawn_layer != null) {
+                    RectangleMapObject loc = (RectangleMapObject) player_spawn_layer.getObjects().get(0);
+                    player.x = loc.getRectangle().x;
+                    player.y = loc.getRectangle().y;
+                }
             }
         }
 
@@ -179,6 +137,23 @@ public class GameScreen implements Screen {
         chests.add(cst);
     }
 
+    public void end_game(){
+        for(Bullet bt: bullets){
+            bt.disposeSounds();
+            bullets.removeValue(bt, false);
+        }
+        mobs.clear();
+        exp_orbs.clear();
+        for(Chest ct: chests){
+            ct.disposeSounds();
+            chests.removeValue(ct, false);
+        }
+        loot.clear();
+        player.held_weapon.disposeSounds();
+        game.setScreen(new EndScreen(game));
+        dispose();
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
@@ -186,11 +161,12 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
+        if(player.hp == 0){return;}
         player.update(delta);
 
         for(int i = mobs.size-1; i>=0; --i){
             Mob m = mobs.get(i);
-            if (new Random().nextInt(100) <= 5) m.update(delta);
+            m.update(delta);
             if(m.dead){
                 mobs.removeIndex(i);
             }
@@ -200,16 +176,12 @@ public class GameScreen implements Screen {
             Bullet b = bullets.get(i);
             b.update(delta);
             if (b.dead) {
+                b.disposeSounds();
                 bullets.removeIndex(i);
             }
         }
 
-        if(player.hp <= 0){
-            bullets.clear();
-            mobs.clear();
-            game.setScreen(new EndScreen(game));
-            dispose();
-        }
+
 
         for (Chest c: chests) {
             c.update(delta);
@@ -245,20 +217,32 @@ public class GameScreen implements Screen {
                         player.energy = Math.min(player.energy+50,player.maxEnergy);
                     }
                 }
+                pickup_sfx.play();
+                pickup_sfx.setLooping(false);
                 loot.removeValue(c_loot,false);
             }
+        }
+
+        if(player.dead){
+            end_game();
+            return;
+        }
+
+        if(mobs.size == 0){
+            end_game();
         }
     }
 
     public void drawPlayerStats() {
+        if(player.hp <= 0){return;}
         s_render.setProjectionMatrix(batch.getProjectionMatrix().idt().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
 
         s_render.begin(ShapeRenderer.ShapeType.Line);
 
-        float tmp_bar_height = 40f* Gdx.graphics.getWidth()/osx;
-        float tmp_bar_width = 400f* Gdx.graphics.getHeight()/osy;
-        float padding = 10f * Gdx.graphics.getHeight()/osy;
+        float tmp_bar_height = 40f* Gdx.graphics.getWidth()/game.osx;
+        float tmp_bar_width = 400f* Gdx.graphics.getHeight()/game.osy;
+        float padding = 10f * Gdx.graphics.getHeight()/game.osy;
 
         float barX = padding;
         float hp_barY = Gdx.graphics.getHeight() - tmp_bar_height - padding; // Y position from top
@@ -302,12 +286,13 @@ public class GameScreen implements Screen {
 
 
 
-        float fontPadding = 5 * scaleFactor;
+        float fontPaddingX = 5 * game.ui_scale_x;
+        float fontPaddingY = 5 * game.ui_scale_y;
 
         batch.begin();
-        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPadding, hp_barY + tmp_bar_height - fontPadding);
-        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPadding, armor_barY + tmp_bar_height - fontPadding);
-        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPadding, energy_barY + tmp_bar_height - fontPadding);
+        font.draw(batch, "HP: " + (int) player.hp + " / " + (int) player.maxHP, barX + fontPaddingX, hp_barY + tmp_bar_height - fontPaddingY);
+        font.draw(batch, "ARMOR: " + (int) player.armor + " / " + (int) player.maxArmor, barX + fontPaddingX, armor_barY + tmp_bar_height - fontPaddingY);
+        font.draw(batch, "ENERGY: " + (int) player.energy + " / " + (int) player.maxEnergy, barX + fontPaddingX, energy_barY + tmp_bar_height - fontPaddingY);
         batch.end();
 
 
@@ -315,6 +300,7 @@ public class GameScreen implements Screen {
     }
 
     public void draw() {
+        if(player.dead){return;}
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         viewport.getCamera().position.set(player.x, player.y, 0);
@@ -353,13 +339,14 @@ public class GameScreen implements Screen {
         drawPlayerStats();
 
 
+
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        scaleFactor = height/osy;
-        font.getData().setScale(font_size * scaleFactor);
+        game.update_ui_scale(width, height);
+        font.getData().setScale(font_size * game.ui_scale_x,font_size*game.ui_scale_y);
     }
 
     @Override
@@ -378,6 +365,15 @@ public class GameScreen implements Screen {
     public void dispose() { // this is not called automatically
         batch.dispose();
         cursor.dispose();
+        font.dispose();
+        s_render.dispose();
+        tiledmap_renderer.dispose();
+        tiledmap.dispose();
+
+
+        pickup_sfx.stop();
+        pickup_sfx.dispose();
+
     }
 
     public Vector2 mousePos() {
@@ -401,7 +397,6 @@ public class GameScreen implements Screen {
                 }
             }
         }
-
         return false;
     }
 }

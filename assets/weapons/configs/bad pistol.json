@@ -7,5 +7,6 @@
   "origin": {
     "x": 0,
     "y": 5
-  }
+  },
+  "is_auto_fire": false
 }

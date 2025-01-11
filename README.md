@@ -4,20 +4,21 @@ A game made in LibGDX.
 
 ## To Do List
 
-### Small
-
-- add a gun
-
-### Big Stuff
-- structure for guns
-- structure for enemies
-- random loot from chests
+### Tasks
+ 
 - randomly generated rooms
-- randomly generated maps
+- structure for enemies
 - a boss
+
+### Work-In-Progress
+
+- random loot from chests
+- randomly generated maps
 
 ### Done!
 
 - ~~render a tilemap~~
 - ~~add collisions for tilemap with entities~~
 - ~~add an enemy~~
+- ~~structure for guns~~
+- ~~add a gun~~

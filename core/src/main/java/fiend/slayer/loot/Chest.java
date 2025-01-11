@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Timer;
@@ -26,6 +29,7 @@ public class Chest extends Entity{
     Player plr;
     boolean fadeout = false;
     Task fade;
+    Music open_sfx;
     public Chest(final GameScreen gs,float px, float py,Player plr){
         super(gs);
         x = px; y = py;
@@ -35,8 +39,7 @@ public class Chest extends Entity{
         this.gs = gs;
         this.plr = plr;
 
-
-
+        open_sfx = Gdx.audio.newMusic(Gdx.files.internal("loot/sounds/chest_open.mp3"));
 
         rng = new Random();
 
@@ -56,6 +59,11 @@ public class Chest extends Entity{
         };
 
 
+    }
+
+    public void playSound(){
+        open_sfx.play();
+        open_sfx.setLooping(false);
     }
 
     public void spawnReward(){
@@ -92,7 +100,15 @@ public class Chest extends Entity{
             fadeout = true;
             Timer.schedule(fade,0f,0.1f);
             spawnReward();
+            playSound();
         }
+    }
+
+    public void disposeSounds(){
+
+        open_sfx.stop();
+        open_sfx.dispose();
+
     }
 
 

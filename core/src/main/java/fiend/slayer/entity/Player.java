@@ -16,7 +16,7 @@ public class Player extends Entity {
 
     float speed = 8f;
 
-    public float maxHP = 10;
+    public float maxHP = 1;
     public float maxArmor = 10;
     public float maxEnergy = 10;
 
@@ -46,7 +46,7 @@ public class Player extends Entity {
             public void run(){
                 if(!dead && armor < maxArmor){
                     armor++;
-                    System.out.println("Armor Increased");
+                    //System.out.println("Armor Increased");
                 }
             }
         };
@@ -99,17 +99,28 @@ public class Player extends Entity {
         }
 
         held_weapon.update(delta);
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            Vector2 mpos = gs.mousePos();
-            float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
-            held_weapon.fire(angle);
+        if(held_weapon.getCurrentWeaponData().is_auto_fire){
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                fire_current_weapon();
+            }
+        }else{
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+                fire_current_weapon();
+            }
         }
+
 
         if (gs.mapCollisionCheck(this)) {
             x = prevX;
             y = prevY;
         }
 
+    }
+
+    public void fire_current_weapon(){
+        Vector2 mpos = gs.mousePos();
+        float angle = MathUtils.atan2(mpos.y - center().y, mpos.x - center().x);
+        held_weapon.fire(angle);
     }
 
     @Override
