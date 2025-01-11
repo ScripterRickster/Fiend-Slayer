@@ -21,6 +21,9 @@ public class Bullet extends Entity {
 
     Music hit_fx;
 
+
+
+
     public Bullet(final GameScreen gs, Entity se, String img_path, float heading, float muzzle_boost, float speed) {
         super(gs);
 
