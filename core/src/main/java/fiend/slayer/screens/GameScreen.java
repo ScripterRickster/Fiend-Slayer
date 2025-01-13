@@ -15,9 +15,6 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -93,6 +90,7 @@ public class GameScreen implements Screen {
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
+
         font.getData().setScale(font_size*game.ui_scale_x,font_size*game.ui_scale_y);
 
         int m_curr = 0, m_limit = 10;
@@ -150,7 +148,7 @@ public class GameScreen implements Screen {
         }
         loot.clear();
         player.held_weapon.disposeSounds();
-        game.setScreen(new EndScreen(game));
+        game.setScreen(new MainScreen(game,false));
         dispose();
     }
 
