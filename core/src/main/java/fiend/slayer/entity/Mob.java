@@ -90,8 +90,8 @@ public class Mob extends Entity {
     }
 
     public void spawn_exp_orb(){
-        float xpos = x + rng.nextFloat() * sprite.getX() / gs.tile_size;
-        float ypos = y + rng.nextFloat() * sprite.getY() / gs.tile_size;
+        float xpos = x + (rng.nextFloat() * sprite.getX()) / gs.tile_size;
+        float ypos = y + (rng.nextFloat() * sprite.getY()) / gs.tile_size;
 
         gs.exp_orbs.add(new EXP_Orb(gs,xpos,ypos,1));
 
