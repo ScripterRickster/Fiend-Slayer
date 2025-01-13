@@ -183,49 +183,6 @@ public class MainScreen implements Screen{
 
     }
 
-    /*
-    public void setupButtons(){
-        start_norm = new Texture("restart_norm.png");
-        start_hover = new Texture("restart_hov.png");
-
-        exit_norm = new Texture("exit_norm.png");
-        exit_hover = new Texture("exit_hov.png");
-
-        Drawable start_normalDrawable = new TextureRegionDrawable(start_norm);
-        Drawable start_hoverDrawable = new TextureRegionDrawable(start_hover);
-
-        Drawable exit_normalDrawable = new TextureRegionDrawable(exit_norm);
-        Drawable exit_hoverDrawable = new TextureRegionDrawable(exit_hover);
-
-        Button.ButtonStyle start_buttonStyle = new Button.ButtonStyle();
-        start_buttonStyle.up = start_normalDrawable;
-        start_buttonStyle.over = start_hoverDrawable;
-
-        start_button = new Button(start_buttonStyle);
-        start_button.setTransform(true);
-        start_button.setScale(game.ui_scale_x,game.ui_scale_y);
-        start_button.setPosition(
-            Gdx.graphics.getWidth() / 2f - start_button.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 3f - start_button.getHeight() / 4f
-        );
-
-        Button.ButtonStyle exit_buttonStyle = new Button.ButtonStyle();
-        exit_buttonStyle.up = exit_normalDrawable;
-        exit_buttonStyle.over = exit_hoverDrawable;
-        exit_button = new Button(exit_buttonStyle);
-
-        exit_button.setTransform(true);
-        exit_button.setScale(game.ui_scale_x,game.ui_scale_y);
-        exit_button.setPosition(
-            Gdx.graphics.getWidth() / 2f - exit_button.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 4f - exit_button.getHeight() / 2f
-        );
-
-        stage.addActor(start_button);
-        stage.addActor(exit_button);
-    }
-    */
-
 
     @Override
     public void show() {

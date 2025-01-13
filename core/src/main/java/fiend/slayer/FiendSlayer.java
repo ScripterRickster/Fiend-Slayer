@@ -9,8 +9,8 @@ import com.badlogic.gdx.Gdx;
 import fiend.slayer.screens.MainScreen;
 
 public class FiendSlayer extends Game {
-    public float ui_scale_x = 1;
-    public float ui_scale_y = 1;
+    public float ui_scale_x = 1f;
+    public float ui_scale_y = 1f;
     public float osx,osy;
     @Override
     public void create() {
@@ -28,6 +28,8 @@ public class FiendSlayer extends Game {
         float uniform_scale = Math.min(width/osx, height/osy);
         ui_scale_x = uniform_scale;
         ui_scale_y = uniform_scale;
+
+        System.out.println("SCALE X: " + ui_scale_x + " | SCALE Y: " + ui_scale_y);
     }
 
     @Override
