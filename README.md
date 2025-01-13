@@ -12,7 +12,7 @@ A game made in LibGDX.
 
 ### Work-In-Progress
 
-- random loot from chests
+- animations
 - randomly generated maps
 
 ### Done!
