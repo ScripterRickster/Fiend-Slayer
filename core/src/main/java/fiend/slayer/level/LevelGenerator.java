@@ -38,7 +38,7 @@ public class LevelGenerator {
         Vector2 here = new Vector2(0, 0);
         vis.add(here);
         
-        Room cur_room = new Room((int)here.x, (int)here.y);
+        Room cur_room = new Room((int)here.x, (int)here.y, "home");
         Room last_room;
         rooms.add(cur_room);
 
@@ -50,7 +50,7 @@ public class LevelGenerator {
                     ++next.y;
                     if (vis.contains(next)) continue;
                     here = new Vector2(next); vis.add(here); ++i;
-                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN);
+                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN, "battle");
                     rooms.add(cur_room);
 
                     if (last_room != null) { last_room.uhall = true; cur_room.dhall = true; }
@@ -59,7 +59,7 @@ public class LevelGenerator {
                     ++next.x;
                     if (vis.contains(next)) continue;
                     here = new Vector2(next); vis.add(here); ++i;
-                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN);
+                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN, "battle");
                     rooms.add(cur_room);
 
                     if (last_room != null) { last_room.rhall = true; cur_room.lhall = true; }
@@ -68,7 +68,7 @@ public class LevelGenerator {
                     --next.y;
                     if (vis.contains(next)) continue; 
                     here = new Vector2(next); vis.add(here); ++i;
-                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN);
+                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN, "battle");
                     rooms.add(cur_room);
                     
                     if (last_room != null) { last_room.dhall = true; cur_room.uhall = true; }
@@ -77,7 +77,7 @@ public class LevelGenerator {
                     --next.x;
                     if (vis.contains(next)) continue;
                     here = new Vector2(next); vis.add(here); ++i;
-                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN);
+                    cur_room = new Room((int)next.x * MAX_ROOM_SIDELEN, (int)next.y * MAX_ROOM_SIDELEN, "battle");
                     rooms.add(cur_room);
 
                     if (last_room != null) { last_room.lhall = true; cur_room.rhall = true; }

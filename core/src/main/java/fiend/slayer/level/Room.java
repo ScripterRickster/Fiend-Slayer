@@ -12,9 +12,12 @@ class Room implements Comparable<Room> {
     private final int MAX_ROOM_SIDELEN = 30;
     private int tile_size = 16;
 
-    public Room(int x, int y) {
+    String type;
+
+    public Room(int x, int y, String type) {
         this.x = x;
         this.y = y;
+        this.type = type;
     }
 
     TiledMapTileLayer lay;
